@@ -20,8 +20,8 @@
   flex-direction: column;
   /* justify-content: space-between; */
   border: 10px solid #005a8f;
-  border-radius: 10px;
-  color: white;
+  border-radius: 20px;
+  color: #cbdee9;
   width: 25vw;
   min-width: 400px;
   height: 60vh;
@@ -61,7 +61,7 @@
   height: 5vh;
   border: 2px solid #00121c;
   background-color: #003655;
-  color: white;
+  color: #cbdee9;
   border-radius: 10px;
   font-size: 3vh;
 }
@@ -72,7 +72,7 @@
   font-size: 20px;
   border: 2px solid #00121c;
   background-color: #005a8f;
-  color: white;
+  color: #cbdee9;
   border-radius: 10px;
 
 }
