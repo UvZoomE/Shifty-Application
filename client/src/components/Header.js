@@ -5,9 +5,7 @@ const Header = () => {
 
  return (
   <div className='Header'>
-    <div className='menuButton'>
-      &#9776;
-    </div>
+    <div></div>
     <div className='title'>
       Shifty
     </div>
