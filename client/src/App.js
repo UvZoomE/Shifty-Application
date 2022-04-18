@@ -10,6 +10,8 @@ import Teams from './components/Teams';
 import Users from './components/Users';
 import OrgCharts from './components/OrgCharts';
 import Reports from './components/Reports';
+import Account from './components/Account';
+
 
 import firebaseConfig from './firebaseConfig.json'
 import { initializeApp } from 'firebase/app'
@@ -52,6 +54,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/create-account' element={<SignUpPage />} />
             <Route path='/' element={<MainPage />} >
+              <Route path='account' element={<Account />} />
               <Route path='calendar' element={<Calendar />} />
               <Route path='teams' element={<Teams />} />
               <Route path='users' element={<Users />} />

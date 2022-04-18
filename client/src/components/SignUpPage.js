@@ -15,7 +15,7 @@ const  handleSubmit = (event, navigate, auth) =>{
     auth.authFunctions.createUserWithEmailAndPassword(auth.authInstance, email, password)
       .then(userCred => auth.authFunctions.getIdToken(userCred.user))
       .then(token => auth.cookie.setCookie(['shifty'], token))
-      .then(() => navigate("/"))
+      .then(() => navigate("/account"))
       .catch(err => console.log(err))
   } else {
     alert('Your passwords did not match. Try again')

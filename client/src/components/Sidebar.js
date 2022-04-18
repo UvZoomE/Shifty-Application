@@ -5,6 +5,7 @@ import '../styles/Sidebar.css'
 const Sidebar = () => {
  return (
   <div className='sidebar' id='sidebar'>
+    <Link to='/account'> Account </Link>
     <Link to='/calendar'> Calendar </Link>
     <Link to='/teams'> Teams </Link>
     <Link to='/users'> Users </Link>
