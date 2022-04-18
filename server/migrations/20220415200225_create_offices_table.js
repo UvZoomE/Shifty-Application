@@ -8,7 +8,7 @@ exports.up = function(knex) {
     table.text('name')
     table.text('org_chart_img_url')
     table.datetime('curr_schedule_start')
-    table.integer('schedule_id')
+    table.integer('schedule_id').nullable()
     table.foreign('schedule_id').references('schedules.id')
   })
 };
