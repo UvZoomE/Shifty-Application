@@ -1,10 +1,10 @@
 const firebaseConfig = require('./firebaseConfig.json')
-const firebaseApp = require('firebase/app');
-module.exports.firebaseAuth = require('firebase/auth');
+const { initializeApp } = require('firebase/app');
+const { getAuth } = require('firebase/auth');
 
 // must initialize firebase app before using other services
 const fbConfig = firebaseConfig;
-const fbApp = firebaseApp.initializeApp(fbConfig);
+module.exports.fbAuthApp = initializeApp(fbConfig);
 
 // create instance of specified firebase service
-module.exports.authInstance = module.exports.firebaseAuth.getAuth(fbApp)
+module.exports.authInstance = getAuth(module.exports.fbAdminApp)
