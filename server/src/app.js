@@ -12,7 +12,7 @@ app.use(express.json())
 app.post('/sign-up', (req, res) => {
   const { email, password } = req.body
   firebaseAuth.createUserWithEmailAndPassword(authInstance, email, password)
-  .then(() => firebaseAuth.getIdToken(authInstance.currentUser, true))
+  .then(userCred => firebaseAuth.getIdToken(userCred, true))
   .then(token => {
     res.set('Authorization', token);
     res.sendStatus(201);

@@ -7,4 +7,4 @@ const fbConfig = firebaseConfig;
 module.exports.fbAuthApp = initializeApp(fbConfig);
 
 // create instance of specified firebase service
-module.exports.authInstance = getAuth(module.exports.fbAdminApp)
+module.exports.authInstance = getAuth(module.exports.fbAuthApp)
