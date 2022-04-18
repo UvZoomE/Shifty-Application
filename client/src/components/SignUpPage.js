@@ -1,38 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css'
 
+import { AuthContext } from "../App.js";
 
-const  handleSubmit = (event, navigate) =>{
+const  handleSubmit = (event, navigate, auth) =>{
   event.preventDefault()
   let {email, password, confirmPassword} = event.target
   email = email.value
   password = password.value
   confirmPassword = confirmPassword.value
-  // alert(`Email: ${email}\nPassword: ${password} \nConfirm Password: ${confirmPassword}`)
-  /*
-    Check if password and confirm password are the same.
 
-    If they are:
-    Send a POST request with email, and password to server
-  */
   if (password === confirmPassword) {
-    //send the post request to server to create account
-
-    navigate("/")
+    auth.authFunctions.createUserWithEmailAndPassword(auth.authInstance, email, password)
+      .then(userCred => auth.authFunctions.getIdToken(userCred.user))
+      .then(token => auth.cookie.setCookie(['shifty'], token))
+      .then(() => navigate("/"))
+      .catch(err => console.log(err))
   } else {
     alert('Your passwords did not match. Try again')
   }
-
-
-
-
-  //navigate to home page
-
 }
 
 const SignUpPage = () => {
   const navigate = useNavigate()
+  const auth = useContext(AuthContext);
 
   return (
     <div className='loginWrapper'>
@@ -40,7 +32,7 @@ const SignUpPage = () => {
         <div className='login_header'>
           Create Account
         </div>
-        <form className='login-form' onSubmit={event => handleSubmit(event, navigate)}>
+        <form className='login-form' onSubmit={event => handleSubmit(event, navigate, auth)}>
           <label htmlFor='email'>Email</label>
           <input className='input' type='text' name='email' id='email' placeholder='email@example.com' />
 
@@ -55,7 +47,7 @@ const SignUpPage = () => {
 
         <div className='create-account' >
             Already have an account?
-          <Link to='/' >
+          <Link to='/login' >
             Log In
           </Link>
         </div>

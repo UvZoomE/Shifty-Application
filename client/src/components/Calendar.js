@@ -16,7 +16,7 @@ const Calendar = () => {
             Generate Schedule
           </button>
 
-          <RuxTimeline start='2022-04-15T07:00:00Z' end='2022-04-19T07:00:00Z' interval='day' playhead='2022-04-16T05:00:00Z' zoom='4'>
+          <RuxTimeline start='2022-04-15T07:00:00Z' end='2022-04-19T07:00:00Z' interval='day' playhead='2022-04-16T05:00:00Z' zoom='3'>
 
             <RuxTrack>
               <div slot="label">
