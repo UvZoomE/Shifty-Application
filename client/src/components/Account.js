@@ -40,25 +40,85 @@ const  handleSubmit = (event, setEdit, setUser) =>{
 }
 
 
+const  handleSubmitOffice = (event, setCreateOffice, user, setUser) =>{
+  event.preventDefault()
+
+  setCreateOffice(false)
+
+  setUser({
+    ...user,
+    office: event.target.office.value
+  })
+
+  let request = {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      office: event.target.office.value,
+      user: user
+    })
+  }
+  console.log(request)
+}
+
+
 
 const Account = () => {
 
   const [edit, setEdit] = useState(false)
+  const [createOffice, setCreateOffice] = useState(false)
+  const [wait, setWait] = useState(false)
 
   const [user, setUser] = useState({
     firstname: "Bob",
     lastname: "Jenkins",
     rank: "Lieutenant General",
     dutyphone: "(555) 123-4567",
-    office: "Arby's"
+    office: ""
   })
 
   const clickHandler = () =>{
     setEdit(!edit)
   }
 
+  // useEffect()
+
  return (
   <div className='accountWrapper' id='subpage'>
+
+      {user.office || createOffice || wait ? '' :
+        <div  className='office-create'>
+          <h2>No Office Detected</h2>
+          <p>Create an office now, OR wait for an admin to add you to an office</p>
+          <div className='teams-buttons'>
+            <button className='button' type='button' onClick={() => setCreateOffice(true)}>Create Office</button>
+            <button className='button' type='button' onClick={() => setWait(true)}>Wait</button>
+          </div>
+        </div>
+      }
+
+      {createOffice ?
+        <div className='office-create'>
+          <div className='account_header'>
+          Create Office
+          </div>
+          <div className='infoWrapper'>
+            <div className='labels'>
+              <div>Name</div>
+              <div>&nbsp;</div>
+            </div>
+            <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, user, setUser) }>
+              <input className='input info' type='text' name='office' id='office' defaultValue={user.office}/>
+              <input className='button save' type="submit" value="Save" />
+            </form>
+          </div>
+        </div> :
+        ''
+      }
+
     <div className='account'>
         <div className='account_header'>
         Account Information <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='max(4vh, 40px)' onClick={clickHandler}></rux-icon>
@@ -78,7 +138,7 @@ const Account = () => {
               <input className='input info' type='text' name='lastname' id='lastname' defaultValue={user.lastname}/>
               <input className='input info' type='text' name='rank' id='rank' defaultValue={user.rank}/>
               <input className='input info' type='text' name='dutyphone' id='dutyphone' defaultValue={user.dutyphone}/>
-              <input className='input info' type='text' name='office' id='office' defaultValue={user.office}/>
+              <input className='input info' type='text' name='office' id='office' value={user.office}/>
               <input className='button save' type="submit" value="Save" />
             </form> :
             <div className='values'>

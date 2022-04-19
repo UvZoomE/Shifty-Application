@@ -1,8 +1,9 @@
 .accountWrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100vw;
   justify-content: center;
+  align-items: center;
   margin-top: 5vh;
   transition: 0.5s;
 }
@@ -16,7 +17,7 @@
 }
 
 
-.account{
+.account {
   display: flex;
   flex-direction: column;
   border: 10px solid #005a8f;
@@ -27,6 +28,20 @@
   height: 70vh;
   min-height: 400px;
   transition: 0.5s;
+}
+
+.office-create {
+  display: flex;
+  flex-direction: column;
+  border: 10px solid #005a8f;
+  border-radius: 20px;
+  color: #cbdee9;
+  width: 50vw;
+  min-width: 500px;
+  height: 30vh;
+  min-height: 200px;
+  transition: 0.5s;
+  margin-bottom: 2vh;
 }
 
 .infoWrapper{
