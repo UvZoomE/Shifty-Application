@@ -1,6 +1,7 @@
 const express = require('express');
 const knex = require('knex')(require('../../knexfile.js')['development']);
 const verifyToken = require('../../utils/verifyToken');
+const { getUserOfficeId } = require('../../utils/getResources.js');
 
 const router = express.Router();
 
@@ -36,19 +37,12 @@ router.post('/current-user', async (req, res) =>{
         })
 })
 
-const getOfficeId = (userId) => {
-  knex.select('office_id').from('users').where('user_id', userId)
-    .then(data => {
-      return data[0].office_id
-    })
-}
-
 // get all users within a given office
 router.get('/current-office', async (req, res) => {
   const idToken = req.cookies['shifty']
   const uid = await verifyToken(idToken);
     if(uid === undefinied) res.sendStatus(401);
-  const officeId = await getOfficeId(uid)
+  const officeId = await getUserOfficeId(uid)
   knex.select('*').from('users').where('office_id', officeId)
       .then(data => res.status(200).send(data))
       .catch(() => res.sendStatus(500))
@@ -61,9 +55,11 @@ router.patch('/:user-id/new-team/:team-id', async (req, res) =>{
     if(uid === undefinied) res.sendStatus(401);
 
   knex('users').where('id', user_id).update({team_id: team_id})
-    .then(res.sendStatus(202))
+    .then(() => res.sendStatus(202))
     .catch(() => res.sendStatus(500))
 })
+
+// /add-to-office/
 
 router.patch('/:user-id/new-office/:office-id', async (req, res) =>{
   const { user_id, office_id } = req.params;

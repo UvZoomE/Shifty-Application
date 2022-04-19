@@ -10,4 +10,11 @@ router.get('/', (req, res) =>{
     .catch(() => res.sendStatus(404))
 })
 
+router.get('/:schedule_id', (req, res) => {
+  const { schedule_id } = req.params;
+  knex.select('*').from('schedules').where('id', schedule_id)
+    .then(data => res.status(200).send(data))
+    .catch(() => res.sendStatus(404))
+})
+
 module.exports = router;

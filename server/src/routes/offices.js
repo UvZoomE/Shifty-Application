@@ -32,7 +32,8 @@ router.post('/new-office', async (req, res) => {
   const officeId = await knex
     .insert(newOffice).into('offices').returning('id')
     .catch(res.sendStatus(500))
-  knex('users').where('id', userId).update({office_id: office_id, isAdmin: true})
+  
+    knex('users').where('id', userId).update({office_id: officeId, isAdmin: true})
     .then(res.sendStatus(201))
     .catch(res.sendStatus(500))
 })
@@ -51,17 +52,20 @@ router.get('/:office_id', async (req, res) => {
   }
 })
 
-router.patch('/:office_id', async (req, res) => {
-  const { office_id } = req.params.office_id;
-  const idToken = req.cookies['shifty'];
+// patch request: { schedule_id: -, start_date: -, office_id: -}
+router.patch('/set-schedule', async (req, res) => {
+  const { scheduleId, startDate, officeId } = req.body;
+  const idToken = req.cookies['shifty']
   const userId = await verifyToken(idToken);
   if(userId === undefined) res.sendStatus(401);
-  knex('users').where('id', userId).update({office_id: office_id})
-  .then(res.sendStatus(202))
-  .catch((err) =>{
-    res.sendStatus(500)
-  })
+  knex('offices').where('office_id', officeId).update({curr_schedule_start: startDate, schedule_id: scheduleId})
+  .then(() => res.sendStatus(201))
+  .catch(() => res.sendStatus(500))
 })
+
+
+// TODO: POST request for org chart img
+// TODO: GET request for org chart img
 
 module.exports = router;
 
