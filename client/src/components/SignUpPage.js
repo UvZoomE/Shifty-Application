@@ -15,7 +15,28 @@ const  handleSubmit = (event, navigate, auth) =>{
     auth.authFunctions.createUserWithEmailAndPassword(auth.authInstance, email, password)
       .then(userCred => auth.authFunctions.getIdToken(userCred.user))
       .then(token => auth.cookie.setCookie(['shifty'], token))
-      .then(() => navigate("/"))
+      .then(() => {
+        const user = {
+          first_name: '',
+          email: email,
+          last_name: '',
+          rank: '',
+          duty_title: '',
+          work_phone: ''
+        }
+
+        let request = {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(user)
+        }
+
+        fetch(`${auth.serverURL}/api/users/current-user`, request)
+      })
+      .then(() => navigate("/account"))
       .catch(err => console.log(err))
   } else {
     alert('Your passwords did not match. Try again')

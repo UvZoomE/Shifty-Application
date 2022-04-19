@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css'
+import { AuthContext } from '../App.js'
 
-const handleSubmit = (event, navigate) => {
+const  handleSubmit = (event, navigate, auth) =>{
   event.preventDefault()
-  // alert(`Email: ${event.target.email.value}\nPassword: ${event.target.password.value}`)
-  /*
-    Send POST request to server with email and password to login
-  */
+  let {email, password} = event.target
+  email = email.value
+  password = password.value
 
-  //verify if input password matches password in database.
-  //if not, make an alert for invalid password
-
-  // Navigate to Main Page
-  navigate("/")
+  auth.authFunctions.signInWithEmailAndPassword(auth.authInstance, email, password)
+    .then(userCred => auth.authFunctions.getIdToken(userCred.user))
+    .then(token => auth.cookie.setCookie(['shifty'], token))
+    .then(() => navigate("/"))
+    .catch(err => console.log(err))
 }
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
   return (
     <div className='loginWrapper'>
@@ -25,7 +27,7 @@ const LoginPage = () => {
         <div className='login_header'>
           Log In
         </div>
-        <form className='login-form' onSubmit={event => handleSubmit(event, navigate)}>
+        <form className='login-form' onSubmit={event => handleSubmit(event, navigate, auth)}>
           <label htmlFor='email'>Email</label>
           <input className='input' type='text' name='email' id='email' placeholder='email@example.com' />
 

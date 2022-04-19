@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon ./src/app.js"
+    "start": "nodemon ./src/app.js",
+    "database": "docker run --rm -it --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v database:/var/lib/postgresql/data postgres"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +13,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "firebase": "^9.6.11",
     "firebase-admin": "^10.0.2",
     "knex": "^1.0.7",
     "morgan": "^1.10.0",
