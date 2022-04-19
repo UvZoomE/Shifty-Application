@@ -21,7 +21,9 @@ router.get('/current-user', async (req, res) => {
         console.log(data)
         knex.select('name').from('offices').where('id', data[0].office_id)
         .then(office_name => {
-          data[0].office_name = office_name[0].name
+          if (office_name[0]) {
+            data[0].office_name = office_name[0].name
+          }
           res.status(200).send(data)
         })
       })

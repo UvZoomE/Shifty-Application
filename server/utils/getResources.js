@@ -7,7 +7,7 @@ module.exports.getUserOfficeId = (userId) => {
     })
   }
 
-modules.exports.getOfficeScheduleId = (officeId) => {
+module.exports.getOfficeScheduleId = (officeId) => {
   knex.select('schedule_id').from('office').where('office_id', officeId)
     .then(data => {
       return data[0].schedule_id
