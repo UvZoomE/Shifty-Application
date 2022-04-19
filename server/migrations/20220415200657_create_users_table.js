@@ -11,13 +11,13 @@ exports.up = function(knex) {
     table.text('rank')
     table.text('duty_title')
     table.text('work_phone')
-    table.boolean('isAdmin')
+    table.boolean('is_admin')
     table.integer('team_id').nullable()
     table.integer('office_id').nullable()
     table.foreign('team_id').references('teams.id')
     table.foreign('office_id').references('offices.id')
   })
-  
+
 };
 
 /**

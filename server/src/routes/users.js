@@ -1,18 +1,35 @@
 const express = require('express');
 const knex = require('knex')(require('../../knexfile.js')['development']);
-const verifyToken = require('../../utils/verifyToken');
+const { verifyToken } = require('../../utils/verifyToken');
 const { getUserOfficeId } = require('../../utils/getResources.js');
 
 const router = express.Router();
 
 // get the information of the requesting user
-router.get('/current-user', async (res, req) => {
-  const idToken = req.cookies['shifty']
-  const uid = await verifyToken(idToken);
-    if(uid === undefinied) res.sendStatus(401);
-  knex.select('*').from('users').where('id', uid)
-    .then(data => res.status(200).send(data))
-    .catch(() => res.sendStatus(404))
+router.get('/current-user', async (req, res) => {
+  if (req.cookies['shifty']) {
+    const idToken = req.cookies['shifty']
+    const uid = await verifyToken(idToken);
+
+    if(uid === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+
+    knex.select('*').from('users').where('id', uid)
+      .then(data => {
+        console.log(data)
+        knex.select('name').from('offices').where('id', data[0].office_id)
+        .then(office_name => {
+          data[0].office_name = office_name[0].name
+          res.status(200).send(data)
+        })
+      })
+      .catch(() => res.sendStatus(404))
+  } else {
+    res.sendStatus(400)
+  }
+
 })
 
 // insert new user into database
@@ -20,19 +37,26 @@ router.get('/current-user', async (res, req) => {
 router.post('/current-user', async (req, res) =>{
   const idToken = req.cookies['shifty']
   const uid = await verifyToken(idToken);
-    if(uid === undefinied) res.sendStatus(401);
+  if(uid === undefined) {
+    res.sendStatus(401);
+    return;
+  }
 
   const newRecord = {
     id: uid,
     ...req.body,
-    isAdmin: false,
+    is_admin: false,
     team_id: null,
     office_id: null
   }
 
-  knex.insert(newRecord).into('users')
-        .then(() => res.sendStatus(201))
+  knex.insert(newRecord).into('users').returning('id')
+        .then(id => {
+          // console.log(id)
+          res.sendStatus(201)
+        })
         .catch((err) =>{
+          console.log(err)
           res.sendStatus(500)
         })
 })

@@ -1,6 +1,6 @@
 const express = require('express');
 const knex = require('knex')(require('../../knexfile.js')['development']);
-const verifyToken = require('../../utils/verifyToken');
+const { verifyToken } = require('../../utils/verifyToken');
 const router = express.Router();
 
 // POST create an office
@@ -21,21 +21,31 @@ router.post('/new-office', async (req, res) => {
   const { office_name } = req.body;
   const idToken = req.cookies['shifty']
   const userId = await verifyToken(idToken);
-  if (userId === undefined) res.sendStatus(401);
-  
+  if (userId === undefined) {
+    res.sendStatus(401);
+    return
+  }
+
   const newOffice = {
-    "office_name": office_name,
-    "org-chart-url": null,
+    "name": office_name,
+    "org_chart_img_url": null,
     "curr_schedule_start": null,
     "schedule_id": null
   }
   const officeId = await knex
     .insert(newOffice).into('offices').returning('id')
-    .catch(res.sendStatus(500))
-  
-    knex('users').where('id', userId).update({office_id: officeId, isAdmin: true})
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(500)
+      return
+    })
+  knex('users').where('id', userId).update({office_id: officeId[0].id, is_admin: true})
     .then(res.sendStatus(201))
-    .catch(res.sendStatus(500))
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(500)
+      return
+    })
 })
 
 router.get('/:office_id', async (req, res) => {

@@ -1,6 +1,6 @@
 import './App.css';
 import React, {useState, useEffect, useContext, createContext} from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useNavigate} from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Header from './components/Header';
@@ -30,6 +30,10 @@ export const AuthContext = createContext(null);
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
+  const [serverURL, setServerURL] = useState('http://localhost:3001')
+  const [user, setUser] = useState()
+
+  const navigate = useNavigate()
 
   const contextVals = {
     authInstance: authInstance,
@@ -42,18 +46,43 @@ function App() {
       cookies: cookies,
       setCookie: setCookie,
       removeCookie: removeCookie
-    }
+    },
+    serverURL: serverURL,
+    user: user,
+    setUser: setUser
   }
+
+  useEffect(() => {
+
+    let request = {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+
+    fetch(`${serverURL}/api/users/current-user`, request)
+      .then(data => data.json())
+      .then(user => {
+        console.log(user)
+        setUser(user)
+      })
+      .catch(() => navigate('/'))
+  }, [])
+
+
 
   return (
     <div className="App">
       <AuthContext.Provider value={contextVals}>
-        <Router>
+
           <Header />
           <Routes>
             <Route path='/login' element={<LoginPage />} />
             <Route path='/create-account' element={<SignUpPage />} />
             <Route path='/' element={<MainPage />} >
+              {/* <Route path='/' element={<Calendar />} /> */}
               <Route path='account' element={<Account />} />
               <Route path='calendar' element={<Calendar />} />
               <Route path='teams' element={<Teams />} />
@@ -63,7 +92,7 @@ function App() {
             </Route>
 
           </Routes>
-        </Router>
+        {/* </Router> */}
       </AuthContext.Provider>
     </div>
   );

@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import { Outlet } from "react-router-dom";
+import React, {useState, useEffect, useContext} from 'react';
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from './Sidebar'
 import '../styles/MainPage.css'
+
+import { AuthContext } from "../App.js";
 
 /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
 function openNav() {
@@ -21,6 +23,16 @@ function closeNav() {
 
 
 const MainPage = () => {
+
+  const navigate = useNavigate()
+  const auth = useContext(AuthContext);
+
+  // if auth.user is undefined, navigate to /login
+  console.log(auth.user)
+  if (auth.user === undefined) {
+    navigate('/login')
+  }
+
   const [showSidebar, setShowSidebar] = useState(false)
 
   const handleClick = () =>{

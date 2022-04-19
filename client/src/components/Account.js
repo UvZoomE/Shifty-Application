@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Account.css'
 
+import { AuthContext } from "../App.js";
 // firstname
 // lastname
 // rank
@@ -10,20 +11,22 @@ import '../styles/Account.css'
 
 const  handleSubmit = (event, setEdit, setUser) =>{
   event.preventDefault()
-  let {firstname, lastname, rank, dutyphone, office} = event.target
-  firstname = firstname.value
-  lastname = lastname.value
+  let {first_name, last_name, rank, work_phone, duty_title, office_name} = event.target
+  first_name = first_name.value
+  last_name = last_name.value
   rank = rank.value
-  dutyphone = dutyphone.value
-  office = office.value
+  duty_title = duty_title.value
+  work_phone = work_phone.value
+  office_name = office_name.value
 
   //send a patch request to the backend
   const user = {
-    firstname,
-    lastname,
+    first_name,
+    last_name,
     rank,
-    dutyphone,
-    office
+    duty_title,
+    work_phone,
+    office_name
   }
 
   let request = {
@@ -40,15 +43,12 @@ const  handleSubmit = (event, setEdit, setUser) =>{
 }
 
 
-const  handleSubmitOffice = (event, setCreateOffice, user, setUser) =>{
+const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
   event.preventDefault()
 
   setCreateOffice(false)
 
-  setUser({
-    ...user,
-    office: event.target.office.value
-  })
+
 
   let request = {
     method: 'POST',
@@ -57,10 +57,32 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser) =>{
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      office: event.target.office.value,
-      user: user
+      office_name: event.target.office_name.value,
     })
   }
+
+  fetch(`${auth.serverURL}/api/offices/new-office`, request)
+  .then(() => {
+    let request = {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+    fetch(`${auth.serverURL}/api/users/current-user`, request)
+      .then(data => data.json())
+      .then(user => {
+        console.log(user)
+        setUser(user)
+      })
+  })
+  setUser({
+    ...user,
+    office_name: event.target.office_name.value
+  })
+
+
   console.log(request)
 }
 
@@ -68,28 +90,31 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser) =>{
 
 const Account = () => {
 
+  const auth = useContext(AuthContext);
+
   const [edit, setEdit] = useState(false)
   const [createOffice, setCreateOffice] = useState(false)
   const [wait, setWait] = useState(false)
 
-  const [user, setUser] = useState({
-    firstname: "Bob",
-    lastname: "Jenkins",
-    rank: "Lieutenant General",
-    dutyphone: "(555) 123-4567",
-    office: ""
-  })
+  // const [user, setUser] = useState({
+  //   first_name: "Bob",
+  //   last_name: "Jenkins",
+  //   rank: "Lieutenant General",
+  //   duty_title: "Manager",
+  //   work_phone: "(555) 123-4567",
+  //   office_name: ""
+  // })
 
   const clickHandler = () =>{
     setEdit(!edit)
   }
 
-  // useEffect()
+  console.log(auth.user)
 
  return (
   <div className='accountWrapper' id='subpage'>
 
-      {user.office || createOffice || wait ? '' :
+      {auth.user.office_name || createOffice || wait ? '' :
         <div  className='office-create'>
           <h2>No Office Detected</h2>
           <p>Create an office now, OR wait for an admin to add you to an office</p>
@@ -110,8 +135,8 @@ const Account = () => {
               <div>Name</div>
               <div>&nbsp;</div>
             </div>
-            <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, user, setUser) }>
-              <input className='input info' type='text' name='office' id='office' defaultValue={user.office}/>
+            <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, auth.user, auth.setUser, auth) }>
+              <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name}/>
               <input className='button save' type="submit" value="Save" />
             </form>
           </div>
@@ -128,25 +153,28 @@ const Account = () => {
             <div>First Name</div>
             <div>Last Name</div>
             <div>Rank</div>
-            <div>Duty Phone</div>
+            <div>Duty Title</div>
+            <div>Work Phone</div>
             <div>Office</div>
             <div>&nbsp;</div>
           </div>
           {edit ?
-            <form  className='values' onSubmit={event => handleSubmit(event, setEdit, setUser) }>
-              <input className='input info' type='text' name='firstname' id='firstname' defaultValue={user.firstname}/>
-              <input className='input info' type='text' name='lastname' id='lastname' defaultValue={user.lastname}/>
-              <input className='input info' type='text' name='rank' id='rank' defaultValue={user.rank}/>
-              <input className='input info' type='text' name='dutyphone' id='dutyphone' defaultValue={user.dutyphone}/>
-              <input className='input info' type='text' name='office' id='office' value={user.office}/>
+            <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth.setUser) }>
+              <input className='input info' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
+              <input className='input info' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
+              <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
+              <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
+              <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
+              <input className='input info' type='text' name='office_name' id='office_name' value={auth.user.office_name}/>
               <input className='button save' type="submit" value="Save" />
             </form> :
             <div className='values'>
-              <div>{user.firstname}</div>
-              <div>{user.lastname}</div>
-              <div>{user.rank}</div>
-              <div>{user.dutyphone}</div>
-              <div>{user.office}</div>
+              <div>{auth.user.first_name}</div>
+              <div>{auth.user.last_name}</div>
+              <div>{auth.user.rank}</div>
+              <div>{auth.user.duty_title}</div>
+              <div>{auth.user.work_phone}</div>
+              <div>{auth.user.office_name || <>&nbsp;</>}</div>
               <div>&nbsp;</div>
             </div>
           }
