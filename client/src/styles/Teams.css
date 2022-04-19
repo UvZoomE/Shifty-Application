@@ -13,11 +13,12 @@
   width: 100vw;
   justify-content: center;
   margin-top: 5vh;
+  transition: 0.5s;
 }
 
 .teams_header{
   background-color: #005a8f;
-  font-size: 5vh;
+  font-size: max(4vh, 40px);
   text-align: center;
   padding-left: 2vh;
   padding-bottom: 1vh;
@@ -30,8 +31,9 @@
   border: 10px solid #005a8f;
   border-radius: 20px;
   color: #cbdee9;
-  width: 20vw;
+  width: 30vw;
   min-width: 400px;
+  min-height: 500px;
   height: 70vh;
 }
 
@@ -41,7 +43,19 @@
   justify-content: space-around;
   height: 100%;
   width: 100%;
+}
 
+.teams-entry {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: start; */
+  /* align-items: center; */
+}
+
+.cancel-icon {
+  position: relative;
+  top: max(0.5vh, 7px);
+  left: min(-2.5vw, -30px);
 }
 
 .team-labels{
@@ -50,16 +64,17 @@
   justify-content: space-around;
   align-items: start;
   height: 100%;
-  font-size: 3vh;
+  font-size: max(3vh, 30px);
 }
 
 .teams-values{
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: start;
+  padding-left: 20px;
   height: 100%;
-  font-size: 3vh;
+  font-size: max(4vh, 30px);
   width: 100%;
 }
 
@@ -87,33 +102,11 @@
   margin-top: 4vh;
 }
 
-.input {
-  width: 100%;
-  margin-bottom: 20px;
-  margin-top: 5px;
-  height: 5vh;
-  border: 2px solid #00121c;
-  background-color: #003655;
-  color: #cbdee9;
-  border-radius: 10px;
-  font-size: 3vh;
-}
-
-.button {
-  height: 5vh;
-  width: 15vh;
-  font-size: 20px;
-  border: 2px solid #00121c;
-  background-color: #005a8f;
-  color: #cbdee9;
-  border-radius: 10px;
-
-}
-
 .teams-buttons{
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
+  width: 100%;
 }
 
 a {

@@ -5,3 +5,25 @@
 body {
   background-color: #002439;
 }
+
+.input {
+  width: 90%;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  height: max(5vh, 40px);
+  border: 2px solid #00121c;
+  background-color: #003655;
+  color: #cbdee9;
+  border-radius: 10px;
+  font-size: max(3vh, 30px);
+}
+
+.button {
+  height: max(5vh, 40px);
+  width: 45%;
+  font-size: max(min(3vh, 4vw), 30px);
+  border: 2px solid #00121c;
+  background-color: #005a8f;
+  color: #cbdee9;
+  border-radius: 10px;
+}

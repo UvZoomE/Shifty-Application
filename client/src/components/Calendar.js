@@ -1,11 +1,11 @@
 import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css'
 import { RuxTimeline, RuxTrack, RuxRuler, RuxTimeRegion } from '@astrouxds/react'
-
 import React from 'react';
+import '../styles/Calendar.css'
 
 const Calendar = () => {
     return (
-        <div className='calendar'>
+        <div className='calendar' id='subpage'>
 
         <select name="schedule-selector">
           <option key="empty" value=""></option>
@@ -16,9 +16,9 @@ const Calendar = () => {
             Generate Schedule
           </button>
 
-          <RuxTimeline start='2022-04-15T07:00:00Z' end='2022-04-19T07:00:00Z' interval='day' playhead='2022-04-16T05:00:00Z' zoom='3'>
+          <RuxTimeline className='timeline' start='2022-04-15T07:00:00Z' end='2022-04-19T07:00:00Z' interval='day' playhead='2022-04-16T05:00:00Z' zoom='3'>
 
-            <RuxTrack>
+            <RuxTrack className='track'>
               <div slot="label">
                   Team A
               </div>

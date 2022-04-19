@@ -4,11 +4,12 @@
   width: 100vw;
   justify-content: center;
   margin-top: 5vh;
+  transition: 0.5s;
 }
 
 .account_header{
   background-color: #005a8f;
-  font-size: 5vh;
+  font-size: max(4vh, 40px);
   text-align: center;
   padding-left: 2vh;
   padding-bottom: 1vh;
@@ -21,9 +22,11 @@
   border: 10px solid #005a8f;
   border-radius: 20px;
   color: #cbdee9;
-  width: 45vw;
-  min-width: 400px;
+  width: 50vw;
+  min-width: 500px;
   height: 70vh;
+  min-height: 400px;
+  transition: 0.5s;
 }
 
 .infoWrapper{
@@ -40,7 +43,7 @@
   justify-content: space-around;
   align-items: start;
   height: 100%;
-  font-size: 3vh;
+  font-size: max(3vh, 30px);
 }
 
 .values{
@@ -49,7 +52,7 @@
   justify-content: space-around;
   align-items: start;
   height: 100%;
-  font-size: 3vh;
+  font-size: max(3vh, 30px);
   width: 40%;
 }
 
@@ -74,39 +77,5 @@
   margin-left: 2vh;
   font-size: 4vh;
   margin-top: 4vh;
-}
-
-.input{
-  width: 90%;
-  margin-bottom: 20px;
-  margin-top: 5px;
-}
-
-.input {
-  height: 5vh;
-  border: 2px solid #00121c;
-  background-color: #003655;
-  color: #cbdee9;
-  border-radius: 10px;
-  font-size: 3vh;
-}
-
-.button {
-  height: 5vh;
-  width: 15vh;
-  font-size: 20px;
-  border: 2px solid #00121c;
-  background-color: #005a8f;
-  color: #cbdee9;
-  border-radius: 10px;
-
-}
-
-a {
-  color: #005a8f;
-}
-
-a:hover {
-  color: orange;
 }
 

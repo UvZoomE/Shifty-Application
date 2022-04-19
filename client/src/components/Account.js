@@ -58,10 +58,10 @@ const Account = () => {
   }
 
  return (
-  <div className='accountWrapper'>
+  <div className='accountWrapper' id='subpage'>
     <div className='account'>
         <div className='account_header'>
-        Account Information <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='4vh' onClick={clickHandler}></rux-icon>
+        Account Information <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='max(4vh, 40px)' onClick={clickHandler}></rux-icon>
         </div>
         <div className='infoWrapper'>
           <div className='labels'>

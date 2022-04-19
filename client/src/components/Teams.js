@@ -2,11 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Teams.css'
 
-// firstname
-// lastname
-// rank
-// duty phone
-// create office or wait to be added
 
 const  handleSubmit = (event, setEdit, teams, setTeams) =>{
   event.preventDefault()
@@ -41,6 +36,15 @@ const Teams = () => {
   ])
 
   const editHandler = () =>{
+    if (edit) {
+      let newTeams = [...teams]
+      for (let i = 0; i < teams.length; i++) {
+        if (teams[i] === '') {
+          newTeams.splice(i, 1)
+        }
+      }
+      setTeams(newTeams)
+    }
     setEdit(!edit)
   }
 
@@ -58,7 +62,7 @@ const Teams = () => {
   }
 
  return (
-  <div className='teamsWrapper'>
+  <div className='teamsWrapper' id='subpage'>
     <div className='teams'>
         <div className='teams_header'>
         Teams <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='4vh' onClick={editHandler}></rux-icon>
@@ -69,9 +73,10 @@ const Teams = () => {
               <form  className='teams-values' onSubmit={event => handleSubmit(event, setEdit, teams, setTeams) }>
                 {teams.map((team, index) => {
                   return (
-                  <div className='teams-entry'>
+                  <div className='teams-entry' key={team}>
+                    <b>{index + 1}:&nbsp;</b>
                     <input className='input teams-info' type='text' name={team} id={team} defaultValue={team}/>
-                    <rux-icon className='cancel-icon' type='button' icon="cancel" style={{"color": "#cbdee9"}} size='4vh' onClick={() => removeHandler(team)}></rux-icon>
+                    <div className='cancel-icon'><rux-icon type='button' icon="cancel" style={{"color": "#cbdee9"}} size='max(3vh, 25px)' onClick={() => removeHandler(team)}></rux-icon></div>
                   </div>
                 )})}
                 <div className='teams-buttons'>
@@ -83,7 +88,7 @@ const Teams = () => {
             </>
              :
             <div className='teams-values'>
-              {teams.map(team => <div>{team}</div>)}
+              {teams.map((team, index) => <div key={team}><b>{index + 1}:</b> {team}</div>)}
               <div>&nbsp;</div>
             </div>
           }
