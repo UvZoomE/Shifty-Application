@@ -1,7 +1,7 @@
 const express = require('express');
-const knex = require('knex')(require('../knexfile.js')['development']);
+const knex = require('knex')(require('../../knexfile.js')['development']);
 const verifyToken = require('../../utils/verifyToken');
-const router = express.Router()
+const router = express.Router();
 
 // POST create an office
   // request body: {name: -------}
@@ -31,7 +31,7 @@ router.post('/new-office', async (req, res) => {
   }
   const officeId = await knex
     .insert(newOffice).into('offices').returning('id')
-      .catch(res.sendStatus(500))
+    .catch(res.sendStatus(500))
   knex('users').where('id', userId).update({office_id: office_id, isAdmin: true})
     .then(res.sendStatus(201))
     .catch(res.sendStatus(500))
@@ -51,7 +51,7 @@ router.get('/:office_id', async (req, res) => {
   }
 })
 
-router.patch('/:office_id', (req, res) => {
+router.patch('/:office_id', async (req, res) => {
   const { office_id } = req.params.office_id;
   const idToken = req.cookies['shifty'];
   const userId = await verifyToken(idToken);
@@ -62,4 +62,6 @@ router.patch('/:office_id', (req, res) => {
     res.sendStatus(500)
   })
 })
+
+module.exports = router;
 

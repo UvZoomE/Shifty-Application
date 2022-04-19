@@ -1,6 +1,6 @@
 const { getAuth } = require('firebase-admin/auth');
 
-modules.export.verifyToken = (token) => {
+module.exports.verifyToken = (token) => {
   getAuth().verifyIdToken(token)
   .then(decodedToken => {
     return decodedToken.uid;
