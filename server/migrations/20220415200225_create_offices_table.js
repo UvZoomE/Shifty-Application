@@ -6,8 +6,8 @@ exports.up = function(knex) {
   return knex.schema.createTable("offices", (table) => {
     table.increments('id')
     table.text('name')
-    table.text('org_chart_img_url')
-    table.datetime('curr_schedule_start')
+    table.text('org_chart_img_url').nullable()
+    table.datetime('curr_schedule_start').nullable()
     table.integer('schedule_id').nullable()
     table.foreign('schedule_id').references('schedules.id')
   })

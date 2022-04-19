@@ -1,64 +1,92 @@
 const express = require('express');
 const knex = require('knex')(require('../knexfile.js')['development']);
+const verifyToken = require('../../utils/verifyToken');
 
 const router = express.Router();
 
-router.post('/', (req, res) =>{
-  // const { email, first_name, last_name, rank, duty_title, work_phone } = req.body;
-  // const idToken = req.cookies['shifty']
-  const { authorization } = req.headers;
-
-  getAuth().verifyIdToken(authorization)
-    .then(decodedToken => {
-      const uid = decodedToken.uid;
-      console.log('uid ' + uid)
-
-      const newRecord = {
-        id: uid,
-        ...req.body,
-        isAdmin: false,
-        team_id: null,
-        office_id: null,
-      }
-
-      console.log(newRecord)
-    
-      knex.insert(newRecord).into('users')
-        .then(() => res.sendStatus(201))
-        .catch((err) =>{
-          console.log(err)
-          res.sendStatus(500)
-        })
-    })
-    .catch(() => res.sendStatus(401))
+// get the information of the requesting user
+router.get('/current-user', (res, req) => {
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+    if(uid === undefinied) res.sendStatus(401);
+  knex.select('*').from('users').where('id', uid)
+    .then(data => res.status(200).send(data))
+    .catch(() => res.sendStatus(404))
 })
 
-const checkIfIdInOffice = (uid) => {
-  knex.select('id').from('users').where('office_id', office_id)
-    .then(data => {
-      if(data.includes(uid)){
-        return true;
-      }
+// insert new user into database
+// request body: { email, first_name, last_name, rank, duty_title, work_phone }
+router.post('/current-user', (req, res) =>{
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+    if(uid === undefinied) res.sendStatus(401);
 
-      return false;
+  const newRecord = {
+    id: uid,
+    ...req.body,
+    isAdmin: false,
+    team_id: null,
+    office_id: null,
+  }
+
+  knex.insert(newRecord).into('users')
+        .then(() => res.sendStatus(201))
+        .catch((err) =>{
+          res.sendStatus(500)
+        })
+})
+
+const getOfficeId = (userId) => {
+  knex.select('office_id').from('users').where('user_id', userId)
+    .then(data => {
+      return data[0].office_id
     })
 }
 
-router.get('/:office_id', (req, res) => {
-  const { office_id } = req.params;
-  // const idToken = req.cookies['shifty']
-  const { Authorization } = req.header;
-  getAuth().verifyIdToken(Authorization)
-  .then(decodedToken => {
-    const uid = decodedToken.uid;
-    if(checkIfIdInOffice(uid)){
-      knex.select('*').from('users').where('office_id', office_id)
-        .then(data => res.status(200).send(data));
-    } else {
-      res.sendStatus(401)
-    }
-  })
-  .catch(() => res.sendStatus(401));
+// get all users within a given office
+router.get('/current-office', async (req, res) => {
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+    if(uid === undefinied) res.sendStatus(401);
+  const officeId = await getOfficeId(uid)
+  knex.select('*').from('users').where('office_id', officeId)
+      .then(data => res.status(200).send(data))
+      .catch(() => res.sendStatus(500))
 })
+
+router.patch('/:user-id/new-team/:team-id', (req, res) =>{
+  const { user_id, team_id } = req.params;
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+    if(uid === undefinied) res.sendStatus(401);
+
+  knex('users').where('id', user_id).update({team_id: team_id})
+    .then(res.sendStatus(202))
+    .catch(() => res.sendStatus(500))
+})
+
+router.patch('/:user-id/new-office/:office-id', (req, res) =>{
+  const { user_id, office_id } = req.params;
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+    if(uid === undefinied) res.sendStatus(401);
+
+  knex('users').where('id', user_id).update({office_id: office_id})
+    .then(res.sendStatus(202))
+    .catch((err) =>{
+      res.sendStatus(500)
+    })
+})
+
+// const checkIfIdInOffice = (uid) => {
+//   knex.select('id').from('users').where('office_id', office_id)
+//     .then(data => {
+//       if(data.includes(uid)){
+//         return true;
+//       }
+
+//       return false;
+//     })
+// }
 
 module.exports = router;
