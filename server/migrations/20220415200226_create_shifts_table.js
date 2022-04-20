@@ -7,10 +7,9 @@ exports.up = function(knex) {
     table.increments('id')
     table.text('notes')
     table.dateTime('start_time')
+    table.dateTime('stop_time')
     table.integer('schedule_id')
     table.foreign('schedule_id').references('schedules.id')
-    table.integer('office_id')
-    table.foreign('office_id').references('offices.id')
   })
 
 };

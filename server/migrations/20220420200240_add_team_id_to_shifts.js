@@ -4,8 +4,15 @@
  */
  exports.up = function(knex) {
   return knex.schema.alterTable("shifts", (table) => {
-    table.integer('team_id')
-    table.foreign('team_id').references(['teams.position', 'teams.office_id'])
+    table.integer('team_position')
+    table.integer('office_id')
+    table.foreign(['team_position', 'office_id']).references(['position', 'office_id']).on('teams')
+
+    // table.integer('team_position')
+    // table.foreign('team_position').references('teams.position')
+
+    // table.integer('office_id')
+    // table.foreign('office_id').references('teams.office_id')
   })
 
 };
@@ -16,7 +23,7 @@
  */
 exports.down = function(knex) {
   return knex.schema.alterTable('shifts', (table) => {
-    table.dropForeign('team_id')
+    table.dropForeign(['team_position', 'office_id'])
   })
 
 };

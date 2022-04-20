@@ -44,11 +44,13 @@ rux-timeline::part(time-region-container) {
 } */
 
 .generate {
-  width: 20vw
+  width: 100%;
+  margin-left: 0px;
 }
 
 .confirm {
-  width: 10vw;
+  width: 15vw;
+  min-width: 200px;
 }
 
 .confirm-buttons {

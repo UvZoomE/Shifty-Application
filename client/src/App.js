@@ -33,6 +33,7 @@ function App() {
   const [serverURL, setServerURL] = useState('http://localhost:3001')
   const [user, setUser] = useState()
   const [teams, setTeams] = useState([])
+  const [tracks, setTracks] = useState()
 
   const navigate = useNavigate()
 
@@ -52,7 +53,9 @@ function App() {
     user: user,
     setUser: setUser,
     teams: teams,
-    setTeams: setTeams
+    setTeams: setTeams,
+    tracks: tracks,
+    setTracks: setTracks
   }
 
   useEffect(() => {

@@ -64,13 +64,17 @@ router.post('/new-user', async (req, res) =>{
       id: userId,
       ...req.body,
       is_admin: false,
-      team_id: null,
+      team_position: null,
+      office_id: null,
       office_id: null
     }
 
     knex.insert(newRecord).into('users').returning('*')
       .then(data => res.status(201).send(data))
-      .catch(() => res.sendStatus(500))
+      .catch(err => {
+        console.log(err)
+        res.sendStatus(500)
+      })
   } else {
     res.sendStatus(400)
   }

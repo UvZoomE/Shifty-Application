@@ -72,7 +72,7 @@ export class Panama extends Schedule {
             start: dayStart.toISOString(),
             stop: nightStart.toISOString(),
             status: "caution",
-            description: <span>{`Day Shift`}<br/>Start: {`${dayStart.toDateString()}`}<br/>Stop: {`${nightStart.toDateString()}`}</span>
+            description: `Day Shift\nStart: ${dayStart.toDateString()}\nStop: ${nightStart.toDateString()}`
           })
         }
       }
@@ -88,7 +88,7 @@ export class Panama extends Schedule {
             start: nightStart.toISOString(),
             stop: nightStop.toISOString(),
             status: "standby",
-            description: <span>{`Night Shift`}<br/>Start: {`${nightStart.toDateString()}`}<br/>Stop: {`${nightStop.toDateString()}`}</span>
+            description: `Night Shift\nStart: ${nightStart.toDateString()}\nStop: ${nightStop.toDateString()}`
           })
         }
       }
@@ -98,20 +98,8 @@ export class Panama extends Schedule {
 
 
 
-    return teamInfo.map(team => (
-      <RuxTrack className='track' key={team.name}>
-        <div slot="label">
-            {team.name}
-        </div>
-        {team.tracks.map((track, index) => (
-          <RuxTimeRegion key={index} start={track.start} end={track.stop} status={track.status}>
-            {track.description}
-        </RuxTimeRegion>
-        ))}
-      </RuxTrack>
-    ))
-
+    return teamInfo
   }
-}
+};
 
 export default Schedule;
