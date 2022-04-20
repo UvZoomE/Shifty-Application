@@ -9,6 +9,8 @@ exports.up = function(knex) {
     table.dateTime('start_time')
     table.integer('schedule_id')
     table.foreign('schedule_id').references('schedules.id')
+    table.integer('office_id')
+    table.foreign('office_id').references('office.id')
   })
   
 };

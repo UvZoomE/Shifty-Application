@@ -4,14 +4,14 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable("users", (table) => {
-    table.text('id')
-    table.text('email')
-    table.text('first_name')
-    table.text('last_name')
-    table.text('rank')
-    table.text('duty_title')
-    table.text('work_phone')
-    table.boolean('is_admin')
+    table.text('id').primary()
+    table.text('email').unique()
+    table.text('first_name').nullable()
+    table.text('last_name').nullable()
+    table.text('rank').nullable()
+    table.text('duty_title').nullable()
+    table.text('work_phone').nullable()
+    table.boolean('is_admin').nullable()
     table.integer('team_id').nullable()
     table.integer('office_id').nullable()
     table.foreign('team_id').references('teams.id')

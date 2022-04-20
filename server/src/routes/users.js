@@ -1,7 +1,7 @@
 const express = require('express');
 const knex = require('knex')(require('../../knexfile.js')['development']);
 const { verifyToken } = require('../../utils/verifyToken');
-const { getUserOfficeId } = require('../../utils/getResources.js');
+const { getUserOfficeId, isUserAdmin } = require('../../utils/getResources.js');
 
 const router = express.Router();
 
@@ -18,14 +18,13 @@ router.get('/current-user', async (req, res) => {
 
     knex.select('*').from('users').where('id', uid)
       .then(data => {
-        console.log(data)
         knex.select('name').from('offices').where('id', data[0].office_id)
-        .then(office_name => {
-          if (office_name[0]) {
-            data[0].office_name = office_name[0].name
-          }
-          res.status(200).send(data)
-        })
+          .then(office_name => {
+            if (office_name[0]) {
+              data[0].office_name = office_name[0].name
+            }
+            res.status(200).send(data)
+          })
       })
       .catch(() => res.sendStatus(404))
   } else {
@@ -36,7 +35,7 @@ router.get('/current-user', async (req, res) => {
 
 // insert new user into database
 // request body: { email, first_name, last_name, rank, duty_title, work_phone }
-router.post('/current-user', async (req, res) =>{
+router.post('/new-user', async (req, res) =>{
   const idToken = req.cookies['shifty']
   const uid = await verifyToken(idToken);
   if(uid === undefined) {
@@ -63,6 +62,21 @@ router.post('/current-user', async (req, res) =>{
         })
 })
 
+// request body: {<vals to edit>: <val>}
+router.patch('/edit-user', async (req, res) => {
+  const idToken = req.cookies['shifty']
+  const uid = await verifyToken(idToken);
+  if(uid === undefined) {
+    res.sendStatus(401);
+    return;
+  }
+
+  knex('users').where('id', uid).update(req.body)
+    .then(() => res.sendStatus(202))
+    .catch(() => res.sendStatus(500))
+
+})
+
 // get all users within a given office
 router.get('/current-office', async (req, res) => {
   const idToken = req.cookies['shifty']
@@ -74,41 +88,63 @@ router.get('/current-office', async (req, res) => {
       .catch(() => res.sendStatus(500))
 })
 
-router.patch('/:user-id/new-team/:team-id', async (req, res) =>{
-  const { user_id, team_id } = req.params;
-  const idToken = req.cookies['shifty']
-  const uid = await verifyToken(idToken);
-    if(uid === undefinied) res.sendStatus(401);
+// request body: {office_id, user_email}
+router.patch('/edit-office', (req, res) => {
+  if (req.cookies['shifty']) {
+    const {office_id, user_email} = req.body;
 
-  knex('users').where('id', user_id).update({team_id: team_id})
-    .then(() => res.sendStatus(202))
-    .catch(() => res.sendStatus(500))
+    const idToken = req.cookies['shifty']
+    const uid = await verifyToken(idToken);
+
+    if(uid === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+
+    if(isAdmin(uid, office_id)){
+      knex('users').where('email', user_email).update({office_id: office_id})
+      .then(res.sendStatus(202))
+      .catch((err) =>{
+        res.sendStatus(500)
+      })
+    } else {
+      res.sendStatus(403)
+    }
+
+
+  } else {
+    res.sendStatus(400)
+  }
+
 })
 
-// /add-to-office/
+// request body: {team_id, user_email}
+router.patch('/edit-team', (req, res) => {
+  if (req.cookies['shifty']) {
+    const {team_id, user_email} = req.body;
 
-router.patch('/:user-id/new-office/:office-id', async (req, res) =>{
-  const { user_id, office_id } = req.params;
-  const idToken = req.cookies['shifty']
-  const uid = await verifyToken(idToken);
-    if(uid === undefinied) res.sendStatus(401);
+    const idToken = req.cookies['shifty']
+    const uid = await verifyToken(idToken);
 
-  knex('users').where('id', user_id).update({office_id: office_id})
-    .then(res.sendStatus(202))
-    .catch((err) =>{
-      res.sendStatus(500)
-    })
+    if(uid === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+
+    if(isAdmin(uid, office_id)){
+      knex('users').where('email', user_email).update({team_id: team_id})
+      .then(res.sendStatus(202))
+      .catch((err) =>{
+        res.sendStatus(500)
+      })
+    } else {
+      res.sendStatus(403)
+    }
+
+
+  } else {
+    res.sendStatus(400)
+  }
 })
-
-// const checkIfIdInOffice = (uid) => {
-//   knex.select('id').from('users').where('office_id', office_id)
-//     .then(data => {
-//       if(data.includes(uid)){
-//         return true;
-//       }
-
-//       return false;
-//     })
-// }
 
 module.exports = router;
