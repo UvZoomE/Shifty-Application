@@ -49,7 +49,7 @@ const Calendar = () => {
                 <div>Stop Date</div>
                 <div>&nbsp;</div>
               </div>
-              <form  className='values' onSubmit={event => handleSubmitSchedule(event) }>
+              <form  className='values' onSubmit={event => handleSubmitSchedule(event /* Parameter reperesenting list of teams */) }>
                 <select className='input info' name="schedule">
                   <option key="empty" value=""></option>
                   <option key="panama" value="panama">Panama</option>

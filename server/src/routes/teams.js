@@ -13,13 +13,13 @@ router.get('/all', async (req, res) => {
       res.sendStatus(401);
       return;
     }
-    
+
     const officeId = await getUserOfficeId(uid);
 
     knex.select('*').from('teams').where('office_id', officeId)
       .then(data => res.status(200).send(data))
       .catch(() => res.sendStatus(500))
-    
+
   } else {
     res.sendStatus(400)
   }
@@ -37,11 +37,15 @@ router.delete('/:team_id', async (req, res) => {
     const { team_id } = req.params
     const officeId = await getUserOfficeId(uid);
 
-    if(await !isUserAdmin(uid, officeId)) res.sendStatus(403);
+    if(await !isUserAdmin(uid, officeId)) {
+      res.sendStatus(403);
+      return;
+    }
+
     await knex('users').where({team_id: team_id, office_id: officeId}).update('team_id', null)
       .catch(() => res.sendStatus(500))
 
-    knex('teams').where('team_id', team_id).del()
+    knex('teams').where('id', team_id).del()
       .then(() => res.sendStatus(200))
       .catch(() => res.sendStatus(500))
 
@@ -96,10 +100,13 @@ router.post('/new-team', async (req, res) => {
     const { team_name } = req.body
     const officeId = await getUserOfficeId(uid);
 
-    if(await !isUserAdmin(userId, office_id)) res.sendStatus(403);
+    if(await !isUserAdmin(userId, office_id)) {
+      res.sendStatus(403);
+      return;
+    }
 
     const newTeam = {
-      team_name,
+      name,
       office_id
     }
 
@@ -117,12 +124,12 @@ router.patch('/new-team-name', async (req, res) => {
   const userId = await verifyToken(idToken);
   if(userId === undefined) res.sendStatus(401);
 
-  const { team_name, team_id } = req.body
+  const { name, id } = req.body
   const officeId = await getUserOfficeId(uid);
 
   if(await !isUserAdmin(userId, office_id)) res.sendStatus(403);
 
-  knex('teams').where({team_id: team_id, office_id: officeId}).update({name: team_name})
+  knex('teams').where({id: team_id, office_id: officeId}).update({name: team_name})
   .then(() => res.sendStatus(201))
   .catch(() => res.sendStatus(500))
 })

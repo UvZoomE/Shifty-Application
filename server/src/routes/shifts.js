@@ -8,12 +8,18 @@ router.get('/:shift_id', (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty']
     const userId = await verifyToken(idToken);
-    if (userId === undefined) res.sendStatus(401);
+    if (userId === undefined) {
+      res.sendStatus(401);
+      return;
+    }
 
     const { shift_id } = req.params;
-    
+
     const userOfficeId = await getUserOfficeId(userId);
-    if(userOfficeId === undefined) res.sendStatus(401);
+    if(userOfficeId === undefined) {
+      res.sendStatus(401);
+      return;
+    }
 
     knex.select('*').from('shifts').where({id: shift_id, office_id: userOfficeId})
       .then(data => res.status(200).send(data))
@@ -68,12 +74,12 @@ router.post('/new-shift', async (req, res) =>{
     if (userId === undefined) res.sendStatus(401);
 
     if(await !isUserAdmin(uid, req.body.office_id)) res.sendStatus(403);
-    
+
     const newShift = {
       ...req.body,
       notes: null
     }
-  
+
     knex.insert(newShift).into('shifts')
       .then(() => res.sendStatus(201))
       .catch(() => res.sendStatus(500))
@@ -83,7 +89,7 @@ router.post('/new-shift', async (req, res) =>{
     //     ...req.body,
     //     notes: null
     //   }
-    
+
     //   knex.insert(newShift).into('shifts')
     //     .then(() => res.sendStatus(201))
     //     .catch(() => res.sendStatus(500))

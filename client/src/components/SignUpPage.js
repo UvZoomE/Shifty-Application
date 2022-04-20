@@ -34,7 +34,7 @@ const  handleSubmit = (event, navigate, auth) =>{
           body: JSON.stringify(user)
         }
 
-        fetch(`${auth.serverURL}/api/users/current-user`, request)
+        fetch(`${auth.serverURL}/api/users/new-user`, request)
       })
       .then(() => navigate("/account"))
       .catch(err => console.log(err))

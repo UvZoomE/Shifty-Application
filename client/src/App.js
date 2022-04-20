@@ -32,6 +32,7 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
   const [serverURL, setServerURL] = useState('http://localhost:3001')
   const [user, setUser] = useState()
+  const [teams, setTeams] = useState([])
 
   const navigate = useNavigate()
 
@@ -49,7 +50,9 @@ function App() {
     },
     serverURL: serverURL,
     user: user,
-    setUser: setUser
+    setUser: setUser,
+    teams: teams,
+    setTeams: setTeams
   }
 
   useEffect(() => {
@@ -65,8 +68,14 @@ function App() {
     fetch(`${serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        console.log(user[0])
         setUser(user[0])
+
+        fetch(`${serverURL}/api/teams/all`, request)
+          .then(data => data.json())
+          .then(teams =>{
+            setTeams(teams)
+          })
+
       })
       .catch(() => navigate('/'))
   }, [])

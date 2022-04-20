@@ -30,7 +30,24 @@ const MainPage = () => {
   // if auth.user is undefined, navigate to /login
   console.log(auth.user)
   if (auth.user === undefined) {
-    navigate('/login')
+    let request = {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+    fetch(`${auth.serverURL}/api/users/current-user`, request)
+      .then(data => data.json())
+      .then(user => {
+        console.log(user[0])
+        auth.setUser(user[0])
+      })
+      .catch(() => navigate('/login'))
+  }
+
+  if (window.location.pathname === "/") {
+    navigate('/calendar')
   }
 
   const [showSidebar, setShowSidebar] = useState(false)

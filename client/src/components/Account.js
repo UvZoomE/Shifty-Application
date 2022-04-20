@@ -9,15 +9,14 @@ import { AuthContext } from "../App.js";
 // duty phone
 // create office or wait to be added
 
-const  handleSubmit = (event, setEdit, setUser) =>{
+const  handleSubmit = (event, setEdit, auth) =>{
   event.preventDefault()
-  let {first_name, last_name, rank, work_phone, duty_title, office_name} = event.target
+  let {first_name, last_name, rank, work_phone, duty_title} = event.target
   first_name = first_name.value
   last_name = last_name.value
   rank = rank.value
   duty_title = duty_title.value
   work_phone = work_phone.value
-  office_name = office_name.value
 
   //send a patch request to the backend
   const user = {
@@ -25,8 +24,7 @@ const  handleSubmit = (event, setEdit, setUser) =>{
     last_name,
     rank,
     duty_title,
-    work_phone,
-    office_name
+    work_phone
   }
 
   let request = {
@@ -37,9 +35,13 @@ const  handleSubmit = (event, setEdit, setUser) =>{
     },
     body: JSON.stringify(user)
   }
+
+  fetch(`${auth.serverURL}/api/users/edit-user`, request)
+
+
   setEdit(false)
-  setUser(user)
-  console.log(request)
+  user.office_name = auth.user.office_name
+  auth.setUser(user)
 }
 
 
@@ -47,8 +49,6 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
   event.preventDefault()
 
   setCreateOffice(false)
-
-
 
   let request = {
     method: 'POST',
@@ -95,15 +95,6 @@ const Account = () => {
   const [edit, setEdit] = useState(false)
   const [createOffice, setCreateOffice] = useState(false)
   const [wait, setWait] = useState(false)
-
-  // const [user, setUser] = useState({
-  //   first_name: "Bob",
-  //   last_name: "Jenkins",
-  //   rank: "Lieutenant General",
-  //   duty_title: "Manager",
-  //   work_phone: "(555) 123-4567",
-  //   office_name: ""
-  // })
 
   const clickHandler = () =>{
     setEdit(!edit)
@@ -157,13 +148,14 @@ const Account = () => {
             <div>&nbsp;</div>
           </div>
           {edit ?
-            <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth.setUser) }>
+            <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth) }>
               <input className='input info' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
               <input className='input info' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
               <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
               <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
               <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
-              <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/>
+              {/* <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/> */}
+              <div>{auth.user.office_name || <>&nbsp;</>}</div>
               <input className='button save' type="submit" value="Save" />
             </form> :
             <div className='values'>

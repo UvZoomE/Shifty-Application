@@ -18,14 +18,15 @@ router.get('/current-user', async (req, res) => {
 
     const userData = await knex.select('*').from('users').where('id', uid)
       .catch(() => res.sendStatus(500))
+
     knex.select('name').from('offices').where('id', userData[0].office_id)
       .then(officeData => {
         userData['office_name'] = officeData[0].name
         res.status(200).send(userData)
       })
       .catch(() => res.sendStatus(500))
-    
-    
+
+
     // knex.select('*').from('users').where('id', uid)
     //   .then(data => {
     //     knex.select('name').from('offices').where('id', data[0].office_id)

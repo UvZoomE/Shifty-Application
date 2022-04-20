@@ -8,9 +8,10 @@ const serviceAccount = require('../utils/shifty-da09a-firebase-adminsdk-vwrct-0a
 const users = require('./routes/users.js');
 const offices = require('./routes/offices.js');
 const schedules = require('./routes/schedules.js');
+const teams = require('./routes/teams.js');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)  
+  credential: admin.credential.cert(serviceAccount)
 })
 
 const PORT = 3001;
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use('/api/users', users);
 app.use('/api/offices', offices);
 app.use('/api/schedules', schedules);
+app.use('/api/teams', teams);
 
 
 app.listen(PORT, () => {
