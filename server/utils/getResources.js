@@ -5,6 +5,7 @@ module.exports.getUserOfficeId = (userId) => {
     .then(data => {
       return data[0].office_id
     })
+    .catch(() => undefined)
   }
 
 module.exports.getOfficeScheduleId = (officeId) => {
@@ -12,6 +13,7 @@ module.exports.getOfficeScheduleId = (officeId) => {
     .then(data => {
       return data[0].schedule_id
     })
+    .catch(() => undefined)
 }
 
 module.exports.isUserAdmin = (userId, officeId) => {
