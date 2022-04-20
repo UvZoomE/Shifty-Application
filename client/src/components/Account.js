@@ -73,8 +73,8 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
     fetch(`${auth.serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        console.log(user)
-        setUser(user)
+        console.log(user[0])
+        setUser(user[0])
       })
   })
   setUser({
@@ -109,9 +109,7 @@ const Account = () => {
     setEdit(!edit)
   }
 
-  console.log(auth.user)
-
- return (
+ return ( auth.user ?
   <div className='accountWrapper' id='subpage'>
 
       {auth.user.office_name || createOffice || wait ? '' :
@@ -165,15 +163,15 @@ const Account = () => {
               <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
               <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
               <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
-              <input className='input info' type='text' name='office_name' id='office_name' value={auth.user.office_name}/>
+              <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/>
               <input className='button save' type="submit" value="Save" />
             </form> :
             <div className='values'>
-              <div>{auth.user.first_name}</div>
-              <div>{auth.user.last_name}</div>
-              <div>{auth.user.rank}</div>
-              <div>{auth.user.duty_title}</div>
-              <div>{auth.user.work_phone}</div>
+              <div>{auth.user.first_name || <>&nbsp;</>}</div>
+              <div>{auth.user.last_name || <>&nbsp;</>}</div>
+              <div>{auth.user.rank || <>&nbsp;</>}</div>
+              <div>{auth.user.duty_title || <>&nbsp;</>}</div>
+              <div>{auth.user.work_phone || <>&nbsp;</>}</div>
               <div>{auth.user.office_name || <>&nbsp;</>}</div>
               <div>&nbsp;</div>
             </div>
@@ -181,7 +179,7 @@ const Account = () => {
         </div>
 
       </div>
-  </div>
+  </div> : <></>
  )
 }
 

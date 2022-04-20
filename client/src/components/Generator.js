@@ -21,6 +21,9 @@ export class Panama extends Schedule {
     this.shift_duration_millis = 12 * 3600 * 1000
     this.shift_start_hr = 7
     this.shift_start_millis = this.start.getTime()  + this.shift_start_hr * 3600 * 1000
+    this.cycle_length_days = 56
+    let days = (this.stop.getTime() - this.start.getTime()) / 1000 / 60/ 60 / 24
+    this.num_cycles = Math.ceil(days / this.cycle_length_days)
   }
 
   generate () {
@@ -34,53 +37,66 @@ export class Panama extends Schedule {
     let team3 = [...week1, ...week1, ...week3, ...week3];
     let team4 = team3.map(day => day === 0 ? 0 : day * -1);
 
+    let finalTeam1 = []
+    let finalTeam2 = []
+    let finalTeam3 = []
+    let finalTeam4 = []
+    let teams = [team1, team2, team3, team4]
+    let finalTeams = [finalTeam1, finalTeam2, finalTeam3, finalTeam4]
+    for (let teamIndex = 0; teamIndex < teams.length; teamIndex++ ) {
+      for (let i = 0; i < this.num_cycles; i++) {
+        finalTeams[teamIndex].push(...teams[teamIndex])
+      }
+    }
+
     let teamInfo = this.teams.map(team => ({
       name: team,
       tracks: []
     }))
 
-    for (let i = 0; i < team1.length; i++) {
+    for (let i = 0; i < finalTeam1.length; i++) {
       let dayStart = new Date();
       let nightStart = new Date();
       let nightStop = new Date();
 
       dayStart.setTime(this.shift_start_millis + this.shift_duration_millis * 2 * i)
-      dayStart = dayStart.toISOString()
 
       nightStart.setTime(this.shift_start_millis + this.shift_duration_millis * 2 * i + this.shift_duration_millis)
-      nightStart = nightStart.toISOString()
 
       nightStop.setTime(this.shift_start_millis + this.shift_duration_millis * 2 * i + 2 * this.shift_duration_millis)
+
+      for (let j = 0; j < 4; j++) {
+        let team = [finalTeam1, finalTeam2, finalTeam3, finalTeam4][j]
+        if (team[i] === 1) {
+          teamInfo[j].tracks.push({
+            start: dayStart.toISOString(),
+            stop: nightStart.toISOString(),
+            status: "caution",
+            description: <span>{`Day Shift`}<br/>Start: {`${dayStart.toDateString()}`}<br/>Stop: {`${nightStart.toDateString()}`}</span>
+          })
+        }
+      }
 
       if (nightStop > this.stop) {
         break
       }
 
-      nightStop = nightStop.toISOString()
-
-
-
       for (let j = 0; j < 4; j++) {
-        let team = [team1, team2, team3, team4][j]
+        let team = [finalTeam1, finalTeam2, finalTeam3, finalTeam4][j]
         if (team[i] === -1) {
           teamInfo[j].tracks.push({
-            start: nightStart,
-            stop: nightStop,
+            start: nightStart.toISOString(),
+            stop: nightStop.toISOString(),
             status: "standby",
-            description: "Night Shift"
-          })
-        } else if (team[i] === 1) {
-          teamInfo[j].tracks.push({
-            start: dayStart,
-            stop: nightStart,
-            status: "caution",
-            description: "Day Shift"
+            description: <span>{`Night Shift`}<br/>Start: {`${nightStart.toDateString()}`}<br/>Stop: {`${nightStop.toDateString()}`}</span>
           })
         }
       }
+
+
     }
-    console.log(teamInfo)
-    console.log(this.shift_duration_millis, this.shift_start_millis)
+
+
 
     return teamInfo.map(team => (
       <RuxTrack className='track' key={team.name}>

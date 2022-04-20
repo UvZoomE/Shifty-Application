@@ -19,6 +19,14 @@
   margin-top: 3vh;
 }
 
+/* rux-track {
+  height: 100px;
+}
+
+rux-timeline::part(time-region-container) {
+  height: 400px;
+} */
+
 /* .calendarWrapper {
   display: flex;
   flex-direction: column;

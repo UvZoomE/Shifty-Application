@@ -65,8 +65,8 @@ function App() {
     fetch(`${serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        console.log(user)
-        setUser(user)
+        console.log(user[0])
+        setUser(user[0])
       })
       .catch(() => navigate('/'))
   }, [])

@@ -35,15 +35,6 @@ const Calendar = () => {
     setTracks(panama.generate())
   }
 
-
-
-  // let shifts = []
-  // let start = new Date('2022-04-18T00:00:00Z')
-  // let stop = new Date('2022-06-11T10:20:30Z')
-  // let panama = new Panama("panama", start, stop, office.teams)
-  // let now = new Date();
-  // let tracks = panama.generate()
-
     return (
       <div className='calendar' id='subpage'>
       {office.schedule_id ? '' :
@@ -71,64 +62,13 @@ const Calendar = () => {
             </div>
           </div>
         }
-
-      <RuxTimeline className='timeline' start={start} end={stop} interval='day' playhead={new Date()} zoom='3'>
-        {tracks}
-        {/* <RuxTrack className='track'>
-          <div slot="label">
-              Team A
-          </div>
-          <RuxTimeRegion start='2022-04-15T07:00:00Z' end='2022-04-15T19:00:00Z' status='caution'>
-            Day Shift
-          </RuxTimeRegion>
-          <RuxTimeRegion start='2022-04-16T07:00:00Z' end='2022-04-16T19:00:00Z' status='caution'>
-            Day Shift
-          </RuxTimeRegion>
-        </RuxTrack>
-
-        <RuxTrack>
-          <div slot="label">
-              Team B
-          </div>
-          <RuxTimeRegion start='2022-04-15T19:00:00Z' end='2022-04-16T07:00:00Z' status='standby'>
-            Night Shift
-          </RuxTimeRegion>
-          <RuxTimeRegion start='2022-04-16T19:00:00Z' end='2022-04-17T07:00:00Z' status='standby'>
-            Night Shift
-          </RuxTimeRegion>
-        </RuxTrack>
-
-        <RuxTrack>
-          <div slot="label">
-              Team C
-          </div>
-          <RuxTimeRegion start='2022-04-17T07:00:00Z' end='2022-04-17T19:00:00Z' status='caution'>
-            Day Shift
-          </RuxTimeRegion>
-          <RuxTimeRegion start='2022-04-18T07:00:00Z' end='2022-04-18T19:00:00Z' status='caution'>
-            Day Shift
-          </RuxTimeRegion>
-        </RuxTrack>
-
-        <RuxTrack>
-          <div slot="label">
-              Team D
-          </div>
-          <RuxTimeRegion start='2022-04-17T19:00:00Z' end='2022-04-18T07:00:00Z' status='standby'>
-            Night Shift
-          </RuxTimeRegion>
-          <RuxTimeRegion start='2022-04-18T19:00:00Z' end='2022-04-19T07:00:00Z' status='standby'>
-            Night Shift
-          </RuxTimeRegion>
-        </RuxTrack>
-
-        */}
-        <RuxTrack slot='ruler'>
-          <RuxRuler></RuxRuler>
-        </RuxTrack>
-
-
-      </RuxTimeline>
+      {tracks ?
+        <RuxTimeline className='timeline' start={start} end={stop} interval='day' playhead={new Date()} zoom='4'>
+          {tracks}
+          <RuxTrack slot='ruler'>
+            <RuxRuler></RuxRuler>
+          </RuxTrack>
+        </RuxTimeline> : <></>}
       </div>
 
     )
