@@ -3,11 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Account.css'
 
 import { AuthContext } from "../App.js";
-// firstname
-// lastname
-// rank
-// duty phone
-// create office or wait to be added
+
 
 const  handleSubmit = (event, setEdit, auth) =>{
   event.preventDefault()
@@ -18,7 +14,6 @@ const  handleSubmit = (event, setEdit, auth) =>{
   duty_title = duty_title.value
   work_phone = work_phone.value
 
-  //send a patch request to the backend
   const user = {
     first_name,
     last_name,
@@ -41,6 +36,8 @@ const  handleSubmit = (event, setEdit, auth) =>{
 
   setEdit(false)
   user.office_name = auth.user.office_name
+  user.email = auth.user.email
+  user.is_admin = auth.user.is_admin
   auth.setUser(user)
 }
 
@@ -100,78 +97,84 @@ const Account = () => {
     setEdit(!edit)
   }
 
- return ( auth.user ?
-  <div className='accountWrapper' id='subpage'>
+  return ( auth.user ?
+    <div className='accountWrapper' id='subpage'>
 
-      {auth.user.office_name || createOffice || wait ? '' :
-        <div  className='office-create'>
-          <h2>No Office Detected</h2>
-          <p>Create an office now, OR wait for an admin to add you to an office</p>
-          <div className='teams-buttons'>
-            <button className='button' type='button' onClick={() => setCreateOffice(true)}>Create Office</button>
-            <button className='button' type='button' onClick={() => setWait(true)}>Wait</button>
+        {auth.user.office_name || createOffice || wait ? '' :
+          <div  className='office-create'>
+            <h2>No Office Detected</h2>
+            <p>Create an office now, OR wait for an admin to add you to an office</p>
+            <div className='teams-buttons'>
+              <button className='button' type='button' onClick={() => setCreateOffice(true)}>Create Office</button>
+              <button className='button' type='button' onClick={() => setWait(true)}>Wait</button>
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      {createOffice ?
-        <div className='office-create'>
+        {createOffice ?
+          <div className='office-create'>
+            <div className='account_header'>
+            Create Office
+            </div>
+            <div className='infoWrapper'>
+              <div className='labels'>
+                <div>Name</div>
+                <div>&nbsp;</div>
+              </div>
+              <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, auth.user, auth.setUser, auth) }>
+                <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name}/>
+                <input className='button save' type="submit" value="Save" />
+              </form>
+            </div>
+          </div> :
+          ''
+        }
+
+      <div className='account'>
           <div className='account_header'>
-          Create Office
+          Account Information <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='max(4vh, 40px)' onClick={clickHandler}></rux-icon>
           </div>
           <div className='infoWrapper'>
             <div className='labels'>
-              <div>Name</div>
+              <div>First Name</div>
+              <div>Last Name</div>
+              <div>Rank</div>
+              <div>Duty Title</div>
+              <div>Work Phone</div>
+              <div>Email</div>
+              <div>Office</div>
+              <div>Admin</div>
               <div>&nbsp;</div>
             </div>
-            <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, auth.user, auth.setUser, auth) }>
-              <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name}/>
-              <input className='button save' type="submit" value="Save" />
-            </form>
+            {edit ?
+              <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth) }>
+                <input className='input info' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
+                <input className='input info' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
+                <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
+                <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
+                <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
+                {/* <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/> */}
+                <div>{auth.user.email || <>&nbsp;</>}</div>
+                <div>{auth.user.office_name || <>&nbsp;</>}</div>
+                <div>{auth.user.is_admin.toString() || <>&nbsp;</>}</div>
+                <input className='button save' type="submit" value="Save" />
+              </form> :
+              <div className='values'>
+                <div>{auth.user.first_name || <>&nbsp;</>}</div>
+                <div>{auth.user.last_name || <>&nbsp;</>}</div>
+                <div>{auth.user.rank || <>&nbsp;</>}</div>
+                <div>{auth.user.duty_title || <>&nbsp;</>}</div>
+                <div>{auth.user.work_phone || <>&nbsp;</>}</div>
+                <div>{auth.user.email || <>&nbsp;</>}</div>
+                <div>{auth.user.office_name || <>&nbsp;</>}</div>
+                <div>{auth.user.is_admin.toString() || "False"}</div>
+                <div>&nbsp;</div>
+              </div>
+            }
           </div>
-        </div> :
-        ''
-      }
 
-    <div className='account'>
-        <div className='account_header'>
-        Account Information <rux-icon icon="edit" style={{"color": "#cbdee9"}} size='max(4vh, 40px)' onClick={clickHandler}></rux-icon>
         </div>
-        <div className='infoWrapper'>
-          <div className='labels'>
-            <div>First Name</div>
-            <div>Last Name</div>
-            <div>Rank</div>
-            <div>Duty Title</div>
-            <div>Work Phone</div>
-            <div>Office</div>
-            <div>&nbsp;</div>
-          </div>
-          {edit ?
-            <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth) }>
-              <input className='input info' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
-              <input className='input info' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
-              <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
-              <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
-              <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
-              {/* <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/> */}
-              <div>{auth.user.office_name || <>&nbsp;</>}</div>
-              <input className='button save' type="submit" value="Save" />
-            </form> :
-            <div className='values'>
-              <div>{auth.user.first_name || <>&nbsp;</>}</div>
-              <div>{auth.user.last_name || <>&nbsp;</>}</div>
-              <div>{auth.user.rank || <>&nbsp;</>}</div>
-              <div>{auth.user.duty_title || <>&nbsp;</>}</div>
-              <div>{auth.user.work_phone || <>&nbsp;</>}</div>
-              <div>{auth.user.office_name || <>&nbsp;</>}</div>
-              <div>&nbsp;</div>
-            </div>
-          }
-        </div>
-
-      </div>
-  </div> : <></>
+    </div> : <></>
  )
 }
 

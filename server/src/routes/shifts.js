@@ -73,7 +73,7 @@ router.post('/new-shift', async (req, res) =>{
     const userId = await verifyToken(idToken);
     if (userId === undefined) res.sendStatus(401);
 
-    if(await !isUserAdmin(uid, req.body.office_id)) res.sendStatus(403);
+    if(await !isUserAdmin(userId, req.body.office_id)) res.sendStatus(403);
 
     const newShift = {
       ...req.body,
@@ -133,7 +133,7 @@ router.patch('/:shift_id/edit-notes', async (req, res) => {
 
     const userOfficeId = await getUserOfficeId(userId);
 
-    if(await !isUserAdmin(uid, userOfficeId)) res.sendStatus(403);
+    if(await !isUserAdmin(userId, userOfficeId)) res.sendStatus(403);
 
     knex('shifts').where('id', shift_id).update({notes: notes, office_id: userOfficeId})
         .then(() => res.sendStatus(201))

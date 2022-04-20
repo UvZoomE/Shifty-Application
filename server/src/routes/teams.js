@@ -8,13 +8,13 @@ const { isUserAdmin, getUserOfficeId } = require('../../utils/getResources');
 router.get('/all', async (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
-    if(uid === undefined) {
+    const userId = await verifyToken(idToken);
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
-    const officeId = await getUserOfficeId(uid);
+    const officeId = await getUserOfficeId(userId);
 
     knex.select('*').from('teams').where('office_id', officeId)
       .then(data => res.status(200).send(data))
@@ -28,16 +28,16 @@ router.get('/all', async (req, res) => {
 router.delete('/:team_id', async (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
-    if(uid === undefined) {
+    const userId = await verifyToken(idToken);
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
     const { team_id } = req.params
-    const officeId = await getUserOfficeId(uid);
+    const officeId = await getUserOfficeId(userId);
 
-    if(await !isUserAdmin(uid, officeId)) {
+    if(await !isUserAdmin(userId, officeId)) {
       res.sendStatus(403);
       return;
     }
@@ -49,7 +49,7 @@ router.delete('/:team_id', async (req, res) => {
       .then(() => res.sendStatus(200))
       .catch(() => res.sendStatus(500))
 
-    // if(await isUserAdmin(uid, officeId)){
+    // if(await isUserAdmin(userId, officeId)){
     //   await knex('users').where('team_id', team_id).update('team_id', null)
     //     .catch(() => res.sendStatus(500))
 
@@ -72,7 +72,7 @@ router.get('/:team_id', async (req, res) => {
     if(userId === undefined) res.sendStatus(401);
 
     const { team_id } = req.params
-    const officeId = await getUserOfficeId(uid);
+    const officeId = await getUserOfficeId(userId);
 
     knex.select('*').from('teams').where({id: team_id, office_id: officeId})
       .then(data => res.status(200).send(data))
@@ -97,22 +97,47 @@ router.post('/new-team', async (req, res) => {
     const userId = await verifyToken(idToken);
     if(userId === undefined) res.sendStatus(401);
 
-    const { team_name } = req.body
-    const officeId = await getUserOfficeId(uid);
+    const { position, name } = req.body
+    const officeId = await getUserOfficeId(userId);
 
-    if(await !isUserAdmin(userId, office_id)) {
+    if(await !isUserAdmin(userId, officeId)) {
       res.sendStatus(403);
       return;
     }
 
     const newTeam = {
       name,
-      office_id
+      position,
+      office_id: officeId
     }
 
-    knex.insert(newTeam).into('teams')
-      .then(() => res.sendStatus(201))
-      .catch(res.sendStatus(500))
+    let teamData = await knex.select('*').from('teams').where('office_id', officeId)
+    console.log(teamData)
+
+    // [
+    //   { position: 4, name: 'Save', office_id: 1 },
+    //   { position: 1, name: 'Team A', office_id: 1 },
+    //   { position: 3, name: null, office_id: 1 },
+    //   { position: 5, name: null, office_id: 1 },
+    //   { position: 2, name: 'Team B', office_id: 1 },
+    //   { position: 6, name: null, office_id: 1 }
+    // ]
+
+    let matches = teamData.filter(team => team.position === position)
+
+    if (matches.length > 0) {
+      knex('teams').where({position: position, office_id: officeId}).update({name: name})
+        .then(() => res.sendStatus(201))
+        .catch(() => res.sendStatus(500))
+    } else{
+      knex.insert(newTeam).into('teams')
+        .then(() => res.sendStatus(201))
+        .catch(err => {
+          console.log(err)
+          res.sendStatus(500)
+        })
+    }
+
   } else {
     res.sendStatus(400)
   }
@@ -125,11 +150,11 @@ router.patch('/new-team-name', async (req, res) => {
   if(userId === undefined) res.sendStatus(401);
 
   const { name, id } = req.body
-  const officeId = await getUserOfficeId(uid);
+  const officeId = await getUserOfficeId(userId);
 
-  if(await !isUserAdmin(userId, office_id)) res.sendStatus(403);
+  if(await !isUserAdmin(userId, officeId)) res.sendStatus(403);
 
-  knex('teams').where({id: team_id, office_id: officeId}).update({name: team_name})
+  knex('teams').where({id: team_id, office_id: officeId}).update({name: name})
   .then(() => res.sendStatus(201))
   .catch(() => res.sendStatus(500))
 })

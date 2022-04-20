@@ -9,25 +9,30 @@ const router = express.Router();
 router.get('/current-user', async (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
+    const userId = await verifyToken(idToken);
 
-    if(uid === undefined) {
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
-    const userData = await knex.select('*').from('users').where('id', uid)
+    const userData = await knex.select('*').from('users').where('id', userId)
       .catch(() => res.sendStatus(500))
-
-    knex.select('name').from('offices').where('id', userData[0].office_id)
+    if (userData[0].office_id) {
+      knex.select('name').from('offices').where('id', userData[0].office_id)
       .then(officeData => {
-        userData['office_name'] = officeData[0].name
-        res.status(200).send(userData)
+        console.log(officeData[0].name)
+        userData[0]['office_name'] = officeData[0].name
+        res.status(200).send(userData[0])
       })
       .catch(() => res.sendStatus(500))
+    } else {
+      res.status(200).send(userData[0])
+    }
 
 
-    // knex.select('*').from('users').where('id', uid)
+
+    // knex.select('*').from('users').where('id', userId)
     //   .then(data => {
     //     knex.select('name').from('offices').where('id', data[0].office_id)
     //       .then(office_name => {
@@ -49,14 +54,14 @@ router.get('/current-user', async (req, res) => {
 router.post('/new-user', async (req, res) =>{
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
-    if(uid === undefined) {
+    const userId = await verifyToken(idToken);
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
     const newRecord = {
-      id: uid,
+      id: userId,
       ...req.body,
       is_admin: false,
       team_id: null,
@@ -75,13 +80,13 @@ router.post('/new-user', async (req, res) =>{
 router.patch('/edit-user', async (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty'];
-    const uid = await verifyToken(idToken);
-    if(uid === undefined) {
+    const userId = await verifyToken(idToken);
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
-    knex('users').where('id', uid).update(req.body)
+    knex('users').where('id', userId).update(req.body)
       .then(() => res.sendStatus(201))
       .catch(() => res.sendStatus(500))
   } else {
@@ -93,10 +98,10 @@ router.patch('/edit-user', async (req, res) => {
 router.get('/current-office', async (req, res) => {
   if (req.cookies['shifty']) {
     const idToken = req.cookies['shifty'];
-    const uid = await verifyToken(idToken);
-      if(uid === undefined) res.sendStatus(401);
+    const userId = await verifyToken(idToken);
+      if(userId === undefined) res.sendStatus(401);
 
-    const officeId = await getUserOfficeId(uid);
+    const officeId = await getUserOfficeId(userId);
 
     knex.select('*').from('users').where('id', officeId)
         .then(data => res.status(200).send(data))
@@ -112,21 +117,21 @@ router.patch('/edit-office', async (req, res) => {
     const {office_id, user_email} = req.body;
 
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
+    const userId = await verifyToken(idToken);
 
-    if(uid === undefined) {
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
-    if(await !isUserAdmin(uid, office_id)) res.sendStatus(403);
+    if(await !isUserAdmin(userId, office_id)) res.sendStatus(403);
     knex('users').where('email', user_email).update({office_id: office_id})
       .then(() => res.sendStatus(201))
       .catch(() => res.sendStatus(500))
 
-    // if(await isUserAdmin(uid, office_id)){
+    // if(await isUserAdmin(userId, office_id)){
     //   knex('users').where('email', user_email).update({office_id: office_id})
-    //   .then(res.sendStatus(202))
+    //   .then(() => res.sendStatus(202))
     //   .catch((err) =>{
     //     res.sendStatus(500)
     //   })
@@ -146,22 +151,22 @@ router.patch('/edit-team', async (req, res) => {
     const {team_id, user_email} = req.body;
 
     const idToken = req.cookies['shifty']
-    const uid = await verifyToken(idToken);
-    if(uid === undefined) {
+    const userId = await verifyToken(idToken);
+    if(userId === undefined) {
       res.sendStatus(401);
       return;
     }
 
-    const officeId = getUserOfficeId(uid);
+    const officeId = getUserOfficeId(userId);
 
-    if(await !isUserAdmin(uid, officeId)) res.sendStatus(403);
+    if(await !isUserAdmin(userId, officeId)) res.sendStatus(403);
     knex('users').where('email', user_email).update({team_id: team_id})
       .then(() => res.sendStatus(202))
       .catch(() => res.sendStatus(500))
 
-    // if(await isUserAdmin(uid, office_id)){
+    // if(await isUserAdmin(userId, office_id)){
     //   knex('users').where('email', user_email).update({team_id: team_id})
-    //   .then(res.sendStatus(202))
+    //   .then(() => res.sendStatus(202))
     //   .catch((err) =>{
     //     res.sendStatus(500)
     //   })

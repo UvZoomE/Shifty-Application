@@ -28,7 +28,7 @@ router.post('/new-office', async (req, res) => {
         return
       })
     knex('users').where('id', userId).update({office_id: officeId[0].id, is_admin: true})
-      .then(res.sendStatus(201))
+      .then(() => res.sendStatus(201))
       .catch(() => {
         res.sendStatus(500)
         return

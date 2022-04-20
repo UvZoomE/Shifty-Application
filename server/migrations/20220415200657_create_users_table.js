@@ -14,7 +14,7 @@ exports.up = function(knex) {
     table.boolean('is_admin').nullable()
     table.integer('team_id').nullable()
     table.integer('office_id').nullable()
-    table.foreign('team_id').references('teams.id')
+    table.foreign('team_id').references(['teams.position', 'teams.office_id'])
     table.foreign('office_id').references('offices.id')
   })
 

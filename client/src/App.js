@@ -68,12 +68,15 @@ function App() {
     fetch(`${serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        setUser(user[0])
+        setUser(user)
 
         fetch(`${serverURL}/api/teams/all`, request)
           .then(data => data.json())
-          .then(teams =>{
-            setTeams(teams)
+          .then(teams => {
+            let positions = teams.map(team => team.position).sort()
+            let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
+            let sortedTeams = teamIndices.map(ix => teams[ix])
+            setTeams(sortedTeams)
           })
 
       })

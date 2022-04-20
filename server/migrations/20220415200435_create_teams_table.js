@@ -4,10 +4,17 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable("teams", (table) => {
-    table.increments('id')
+    // table.increments('id')
+    // table.text('name')
+    // table.integer('office_id')
+    // table.foreign('office_id').references('offices.id')
+
+    table.integer('position')
     table.text('name')
     table.integer('office_id')
     table.foreign('office_id').references('offices.id')
+    table.primary(['position', 'office_id'])
+
   })
 };
 

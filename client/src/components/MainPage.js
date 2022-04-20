@@ -28,7 +28,6 @@ const MainPage = () => {
   const auth = useContext(AuthContext);
 
   // if auth.user is undefined, navigate to /login
-  console.log(auth.user)
   if (auth.user === undefined) {
     let request = {
       method: 'GET',
@@ -40,8 +39,7 @@ const MainPage = () => {
     fetch(`${auth.serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        console.log(user[0])
-        auth.setUser(user[0])
+        auth.setUser(user)
       })
       .catch(() => navigate('/login'))
   }

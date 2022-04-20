@@ -4,34 +4,44 @@ import '../styles/Teams.css'
 
 import { AuthContext } from "../App.js";
 
-const  handleSubmit = async (event, setEdit, auth, targetTeams) =>{
+const handleSubmit = async (event, setEdit, auth, targetTeams) =>{
   event.preventDefault()
-
   //send a patch request to the backend
   let newTeams = []
   for (let i = 0; i < targetTeams.length; i++) {
     newTeams.push({
       name: event.target[i].value,
+      position: i + 1,
       office_id: auth.user.office_id
     })
   }
 
-  auth.teams.forEach(async team =>{
-    console.log("DELETING Team", team.id)
-    let request = {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    await fetch(`${auth.serverURL}/api/teams/${team.id}`, request)
-  })
+  let remaining = 6 - targetTeams.length
+  for (let i = 6 - remaining; i < 6; i++) {
+    newTeams.push({
+      name: '',
+      position: i + 1,
+      office_id: auth.user.office_id
+    })
+  }
 
 
+  // auth.teams.forEach(async team =>{
+  //   console.log("DELETING Team", team.position)
+  //   let request = {
+  //     method: 'DELETE',
+  //     credentials: 'include',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }
 
-  newTeams.forEach(team => {
+  //   await fetch(`${auth.serverURL}/api/teams/${team.position}`, request)
+  // })
+
+
+
+  newTeams.forEach(async team => {
 
     let request = {
       method: 'POST',
@@ -42,7 +52,7 @@ const  handleSubmit = async (event, setEdit, auth, targetTeams) =>{
       body: JSON.stringify(team)
     }
 
-    fetch(`${auth.serverURL}/api/teams/new-team`, request)
+    await fetch(`${auth.serverURL}/api/teams/new-team`, request)
 
   })
 
@@ -59,15 +69,10 @@ const Teams = () => {
   const [edit, setEdit] = useState(false)
   const [targetTeams, setTargetTeams] = useState(auth.teams)
 
-  console.log("auth.teams: ",auth.teams)
-  console.log("targetTeams: ", targetTeams)
-
   useEffect(() => {
     setTargetTeams(auth.teams)
     auth.setTeams(auth.teams)
   }, [auth.teams])
-
-  console.log("Teams: ", targetTeams)
 
   const editHandler = () =>{
     if (edit) {
@@ -77,7 +82,7 @@ const Teams = () => {
           newTeams.splice(i, 1)
         }
       }
-      targetTeams(newTeams)
+      setTargetTeams(newTeams)
     }
     setEdit(!edit)
   }
@@ -88,7 +93,7 @@ const Teams = () => {
   }
 
   const removeHandler = (teamId) =>{
-    let team = targetTeams.filter(team => team.id === teamId)[0]
+    let team = targetTeams.filter(team => team.position === teamId)[0]
     let index = targetTeams.indexOf(team)
     let newTeams = [...targetTeams]
     newTeams.splice(index, 1)
@@ -108,10 +113,10 @@ const Teams = () => {
               <form  className='teams-values' onSubmit={event => handleSubmit(event, setEdit, auth, targetTeams) }>
                 {targetTeams.map((team, index) => {
                   return (
-                  <div className='teams-entry' key={team.id}>
+                  <div className='teams-entry' key={team.position}>
                     <b>{index + 1}:&nbsp;</b>
-                    <input className='input teams-info' type='text' name={team.id} id={team.id} defaultValue={team.name}/>
-                    <div className='cancel-icon'><rux-icon type='button' icon="cancel" style={{"color": "#cbdee9"}} size='max(3vh, 25px)' onClick={() => removeHandler(team.id)}></rux-icon></div>
+                    <input className='input teams-info' type='text' name={team.position} id={team.position} defaultValue={team.name}/>
+                    <div className='cancel-icon'><rux-icon type='button' icon="cancel" style={{"color": "#cbdee9"}} size='max(3vh, 25px)' onClick={() => removeHandler(team.position)}></rux-icon></div>
                   </div>
                 )})}
                 <div className='teams-buttons'>
@@ -124,7 +129,7 @@ const Teams = () => {
              :
             <div className='teams-values'>
                 { targetTeams.length ?
-                  targetTeams.map((team, index) => <div key={team.id}><b>{index + 1}:</b> {team.name}</div>) :
+                  targetTeams.map((team, index) => team.name ? <div key={team.position}><b>{index + 1}:</b> {team.name}</div> : '') :
                   <div className='no-Teams'>
                     No teams found. Click the edit button to add teams!
                   </div>

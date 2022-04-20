@@ -10,9 +10,9 @@ exports.up = function(knex) {
     table.integer('schedule_id')
     table.foreign('schedule_id').references('schedules.id')
     table.integer('office_id')
-    table.foreign('office_id').references('office.id')
+    table.foreign('office_id').references('offices.id')
   })
-  
+
 };
 
 /**
@@ -25,5 +25,5 @@ exports.down = function(knex) {
   }).then(() => {
     return knex.schema.dropTableIfExists('shifts')
   })
-  
+
 };

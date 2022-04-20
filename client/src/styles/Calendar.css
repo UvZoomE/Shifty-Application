@@ -42,3 +42,18 @@ rux-timeline::part(time-region-container) {
 .track {
   transition: 0.5s;
 } */
+
+.generate {
+  width: 20vw
+}
+
+.confirm {
+  width: 10vw;
+}
+
+.confirm-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 5vh;
+}
