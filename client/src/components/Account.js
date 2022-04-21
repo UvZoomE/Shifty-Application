@@ -148,11 +148,11 @@ const Account = () => {
             </div>
             {edit ?
               <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth) }>
-                <input className='input info' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
-                <input className='input info' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
-                <input className='input info' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
-                <input className='input info' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
-                <input className='input info' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
+                <input className='input schedInput' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
+                <input className='input schedInput' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
+                <input className='input schedInput' type='text' name='rank' id='rank' defaultValue={auth.user.rank}/>
+                <input className='input schedInput' type='text' name='duty_title' id='duty_title' defaultValue={auth.user.duty_title}/>
+                <input className='input schedInput' type='text' name='work_phone' id='work_phone' defaultValue={auth.user.work_phone}/>
                 {/* <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name} readOnly/> */}
                 <div>{auth.user.email || <>&nbsp;</>}</div>
                 <div>{auth.user.office_name || <>&nbsp;</>}</div>
