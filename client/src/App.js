@@ -96,7 +96,7 @@ function App() {
           .catch(() => '')
 
         })
-        .catch(() => '')
+        .catch(() => navigate('/login'))
 
 
     }
