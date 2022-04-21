@@ -33,20 +33,6 @@ router.get('/current-user', async (req, res) => {
     } else {
       res.status(200).send(userData[0])
     }
-
-
-
-    // knex.select('*').from('users').where('id', userId)
-    //   .then(data => {
-    //     knex.select('name').from('offices').where('id', data[0].office_id)
-    //       .then(office_name => {
-    //         if (office_name[0]) {
-    //           data[0].office_name = office_name[0].name
-    //         }
-    //         res.status(200).send(data)
-    //       })
-    //   })
-    //   .catch(() => res.sendStatus(404))
   } else {
     res.sendStatus(400)
   }
