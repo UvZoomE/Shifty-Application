@@ -4,6 +4,7 @@
  */
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
+  await knex.schema.raw('TRUNCATE schedules CASCADE')
   await knex('schedules').del()
   await knex('schedules').insert([
     {id: 1, type: 'Panama', num_teams: 4, shift_duration: 12, days_off_per_year: 182, example_image_url: null, cycle_length: 56},

@@ -16,26 +16,27 @@ function makeid(length) {
 
 const generateUsers = () => {
   const dummyUsers = []
-  for(let i = 0; i < 10000; i++){
-    let fullName = faker.name().split(' ');
-    let firstName = fullName[0];
-    let lastName = fullName[1];
+  for(let i = 0; i < 5000; i++){
+    let firstName = faker.name.firstName();
+    let lastName = faker.name.lastName();
     let newUser = {
       id: makeid(8),
-      email: faker.internet.email(firstName, lastName),
+      email: faker.internet.email(firstName + i, lastName),
       first_name: firstName,
       last_name: lastName,
-      rank: rankList[Math.floor(Math.random() * 10)],
-      duty_title: dutyTitle[Math.floor(Math.random() * 8)],
+      rank: rankList[Math.floor(Math.random() * rankList.length)],
+      duty_title: dutyTitle[Math.floor(Math.random() * dutyTitle.length)],
       work_phone: faker.phone.phoneNumber(),
-      isAdmin: dutyTitle[Math.floor(Math.random() * 3)],
-      team_id: Math.floor(Math.random() * 4),
-      office_id: Math.floor(Math.random() * 11) 
+      is_admin: isAdmin[Math.floor(Math.random() * isAdmin.length)],
+      team_position: Math.ceil(Math.random() * 4),
+      office_id: Math.ceil(Math.random() * 10) 
     }
 
     dummyUsers.push(newUser)
 
   }
+
+  return dummyUsers;
 }
 
 /**
@@ -44,6 +45,6 @@ const generateUsers = () => {
  */
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
-  await knex('table_name').del()
-  await knex('table_name').insert(generateUsers());
+  await knex('users').del()
+  await knex('users').insert(generateUsers());
 };
