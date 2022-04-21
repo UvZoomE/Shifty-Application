@@ -9,7 +9,7 @@ exports.up = function(knex) {
     table.integer('num_teams')
     table.integer('shift_duration')
     table.integer('days_off_per_year')
-    table.text('example_image_url')
+    table.text('example_image_url').nullable()
     table.integer('cycle_length')
   })
   
