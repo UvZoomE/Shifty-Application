@@ -19,6 +19,7 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.1.2",
     "supertest": "^6.2.2"
   }
 }
