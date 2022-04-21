@@ -63,7 +63,6 @@ const Calendar = () => {
 
     let newSchedule = new schedules[schedule.value].schedule(schedules[schedule.value].name, start.value, stop.value, teams, schedule.value)
     let newTracks = newSchedule.generate()
-    console.log(newTracks)
     setStart(getStartStop(newTracks)[0].toISOString())
     setStop(getStartStop(newTracks)[1].toISOString())
     setTracks(newTracks)

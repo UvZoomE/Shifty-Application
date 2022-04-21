@@ -69,7 +69,6 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
     fetch(`${auth.serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        console.log(user[0])
         setUser(user[0])
       })
   })
@@ -78,8 +77,6 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
     office_name: event.target.office_name.value
   })
 
-
-  console.log(request)
 }
 
 

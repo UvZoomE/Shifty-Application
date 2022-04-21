@@ -93,10 +93,10 @@ function App() {
             setShifts(shifts)
             setTracks(shiftsToTracks(shifts, sortedTeams.filter(team => team.name)))
           })
-          .catch(err => console.log(err))
+          .catch(() => '')
 
         })
-        .catch(err => console.log(err))
+        .catch(() => '')
 
 
     }

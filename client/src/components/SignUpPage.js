@@ -37,7 +37,7 @@ const  handleSubmit = (event, navigate, auth) =>{
         fetch(`${auth.serverURL}/api/users/new-user`, request)
       })
       .then(() => navigate("/account"))
-      .catch(err => console.log(err))
+      .catch(() => '')
   } else {
     alert('Your passwords did not match. Try again')
   }

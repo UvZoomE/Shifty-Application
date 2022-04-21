@@ -13,7 +13,7 @@ const  handleSubmit = (event, navigate, auth) =>{
     .then(userCred => auth.authFunctions.getIdToken(userCred.user))
     .then(token => auth.cookie.setCookie(['shifty'], token))
     .then(() => navigate("/calendar"))
-    .catch(err => console.log(err))
+    .catch(() => '')
 }
 
 
