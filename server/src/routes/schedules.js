@@ -1,7 +1,9 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-
+import express from 'express'
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
 const router = express.Router()
+const knex = knexImport(knexfile['development'])
 
 // get all schedules
 router.get('/', (req, res) =>{
@@ -17,4 +19,4 @@ router.get('/:schedule_id', (req, res) => {
     .catch(() => res.sendStatus(404))
 })
 
-module.exports = router;
+export default router;

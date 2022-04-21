@@ -1,17 +1,10 @@
-const request = require('supertest');
-const users = require('../src/app.js');
-const { firebase, authInstance } = require('../utils/clientFbInstance.js');
-const { faker } = require('@faker-js/faker');
+import request from 'supertest';
+import users from '../src/app.js';
+import { firebase, authInstance } from '../utils/clientFbInstance.js';
+import { faker } from '@faker-js/faker';
 
 const EMAIL = faker.internet.email();
 const PASSWORD = faker.internet.password();
-
-const createRandomUserInFb = async () => {
-  return await firebase.createUserWithEmailAndPassword(authInstance, EMAIL, PASSWORD)
-  .then((userCred) => firebase.getIdToken(userCred.user, true))
-}
-
-let shiftyToken = createRandomUserInFb()
 
 describe('POST /api/users/new-user', () => {
   // let shiftyToken;

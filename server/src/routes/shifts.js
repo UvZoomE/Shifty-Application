@@ -1,8 +1,11 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-const { verifyToken } = require('../../utils/verifyToken');
-const { getUserOfficeId, getOfficeScheduleId, isUserAdmin } = require('../../utils/getResources.js');
+import express from 'express'
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
+import {verifyToken} from '../../utils/verifyToken.js'
+import { getUserOfficeId, getOfficeScheduleId, isUserAdmin } from '../../utils/getResources.js'
 const router = express.Router();
+const knex = knexImport(knexfile['development'])
 
 router.get('/id/:shift_id', async (req, res) => {
   if (req.cookies['shifty']) {
@@ -205,4 +208,4 @@ router.patch('/:shift_id/edit-notes', async (req, res) => {
   }
 })
 
-module.exports = router;
+export default router;

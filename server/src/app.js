@@ -1,15 +1,21 @@
-var cors = require('cors')
-const cookieParser = require('cookie-parser')
-const express = require('express');
-const knex = require('knex')(require('../knexfile.js')['development']);
-const morgan = require('morgan');
-const admin = require('firebase-admin');
-const serviceAccount = require('../utils/shifty-da09a-firebase-adminsdk-vwrct-0a4e73b2e8.json');
-const users = require('./routes/users.js');
-const offices = require('./routes/offices.js');
-const schedules = require('./routes/schedules.js');
-const teams = require('./routes/teams.js');
-const shifts = require('./routes/shifts.js');
+import cors from 'cors';
+import cookieParser from 'cookie-parser'
+import express from 'express';
+// import knex from 'knex'(require('../knexfile.js')['development']);
+
+import knexImport from 'knex'
+import knexfile from '../knexfile.js'
+
+import morgan from 'morgan';
+import admin from 'firebase-admin';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url)
+const serviceAccount = require('../utils/adminKey.json');
+import users from './routes/users.js';
+import offices from './routes/offices.js';
+import schedules from './routes/schedules.js';
+import teams from './routes/teams.js';
+import shifts from './routes/shifts.js';
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -17,6 +23,7 @@ admin.initializeApp({
 
 const PORT = 3001;
 const app = express();
+const knex = knexImport(knexfile['development'])
 
 app.use(morgan('tiny'))
 app.use(express.json())

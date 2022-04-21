@@ -1,6 +1,13 @@
-const knex = require('knex')(require('../knexfile.js')['development']);
+// const knex = require('knex')(require('../knexfile.js')['development']);
 
-module.exports.getUserOfficeId = (userId) => {
+import knexImport from 'knex'
+import knexfile from '../knexfile.js'
+
+const knex = knexImport(knexfile['development'])
+
+
+
+export const getUserOfficeId = (userId) => {
   return knex.select('office_id').from('users').where('id', userId)
     .then(data => {
       return data[0].office_id
@@ -8,7 +15,7 @@ module.exports.getUserOfficeId = (userId) => {
     .catch(() => undefined)
   }
 
-module.exports.getOfficeScheduleId = (officeId) => {
+  export const getOfficeScheduleId = (officeId) => {
   return knex.select('schedule_id').from('office').where('id', officeId)
     .then(data => {
       return data[0].schedule_id
@@ -16,7 +23,7 @@ module.exports.getOfficeScheduleId = (officeId) => {
     .catch(() => undefined)
 }
 
-module.exports.isUserAdmin = (userId, officeId) => {
+export const isUserAdmin = (userId, officeId) => {
   return knex.select('is_admin').from('users').where({id: userId, office_id: officeId})
     .then(data => {
       return data[0].is_admin

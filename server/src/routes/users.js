@@ -1,9 +1,12 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-const { verifyToken } = require('../../utils/verifyToken');
-const { getUserOfficeId, isUserAdmin } = require('../../utils/getResources.js');
+import express from 'express';
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
+import { verifyToken } from '../../utils/verifyToken.js'
+import { getUserOfficeId, isUserAdmin } from '../../utils/getResources.js'
 
 const router = express.Router();
+const knex = knexImport(knexfile['development'])
 
 // get the information of the requesting user
 router.get('/current-user', async (req, res) => {
@@ -30,20 +33,6 @@ router.get('/current-user', async (req, res) => {
     } else {
       res.status(200).send(userData[0])
     }
-
-
-
-    // knex.select('*').from('users').where('id', userId)
-    //   .then(data => {
-    //     knex.select('name').from('offices').where('id', data[0].office_id)
-    //       .then(office_name => {
-    //         if (office_name[0]) {
-    //           data[0].office_name = office_name[0].name
-    //         }
-    //         res.status(200).send(data)
-    //       })
-    //   })
-    //   .catch(() => res.sendStatus(404))
   } else {
     res.sendStatus(400)
   }
@@ -183,4 +172,4 @@ router.patch('/edit-team', async (req, res) => {
   }
 })
 
-module.exports = router;
+export default router;

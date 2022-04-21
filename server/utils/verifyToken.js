@@ -1,6 +1,6 @@
-const { getAuth } = require('firebase-admin/auth');
+import { getAuth } from 'firebase-admin/auth';
 
-module.exports.verifyToken = (token) => {
+export const verifyToken = (token) => {
   return getAuth().verifyIdToken(token)
   .then(decodedToken => {
     return decodedToken.uid;
@@ -9,3 +9,5 @@ module.exports.verifyToken = (token) => {
     return undefined;
   })
 }
+
+// export default verifyToken;
