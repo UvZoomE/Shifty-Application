@@ -1,11 +1,6 @@
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
 import express from 'express';
-// import knex from 'knex'(require('../knexfile.js')['development']);
-
-import knexImport from 'knex'
-import knexfile from '../knexfile.js'
-
 import morgan from 'morgan';
 import admin from 'firebase-admin';
 import { createRequire } from 'module';
@@ -21,9 +16,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 })
 
-const PORT = 3001;
 const app = express();
-const knex = knexImport(knexfile['development'])
 
 app.use(morgan('tiny'))
 app.use(express.json())
@@ -36,7 +29,4 @@ app.use('/api/schedules', schedules);
 app.use('/api/teams', teams);
 app.use('/api/shifts', shifts);
 
-
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
-})
+export default app;

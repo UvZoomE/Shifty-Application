@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon --experimental-vm-modules ./src/app.js",
+    "start": "nodemon ./src/index.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "database": "docker run --rm -it --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v database:/var/lib/postgresql/data postgres"
+    "database": "docker run --rm -it --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v database:/var/lib/postgresql/data postgres",
+    "heroku-postbuild": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +16,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "firebase-admin": "^10.0.2",
+    "firebase-admin": "^10.1.0",
     "knex": "^1.0.7",
     "morgan": "^1.10.0",
     "pg": "^8.7.3"

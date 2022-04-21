@@ -3,7 +3,7 @@ import express from 'express'
 import knexImport from 'knex'
 import knexfile from '../../knexfile.js'
 const router = express.Router()
-const knex = knexImport(knexfile['development'])
+const knex = knexImport(knexfile[process.env.NODE_ENV || 'development'])
 
 // get all schedules
 router.get('/', (req, res) =>{

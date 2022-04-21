@@ -1,6 +1,5 @@
 import request from 'supertest';
 import users from '../src/app.js';
-import { firebase, authInstance } from '../utils/clientFbInstance.js';
 import { faker } from '@faker-js/faker';
 
 const EMAIL = faker.internet.email();
@@ -22,6 +21,14 @@ describe('POST /api/users/new-user', () => {
       })
   })
 
-  //test('returns status of 201 when user created', ())
+  test('returns status of 201 when user created', (done) => {
+    request(users)
+    .post('/new-user')
+    .expect(201)
+    .end((err, res) => {
+      if(err) throw err;
+      done();
+    })
+  })
   // test('returns new user record after creation')
 })

@@ -1,4 +1,3 @@
-utils/adminKey.json
 utils/firebaseConfig.json
 node_modules
 .DS_Store

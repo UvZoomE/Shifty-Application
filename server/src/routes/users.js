@@ -6,7 +6,7 @@ import { verifyToken } from '../../utils/verifyToken.js'
 import { getUserOfficeId, isUserAdmin } from '../../utils/getResources.js'
 
 const router = express.Router();
-const knex = knexImport(knexfile['development'])
+const knex = knexImport(knexfile[process.env.NODE_ENV || 'development'])
 
 // get the information of the requesting user
 router.get('/current-user', async (req, res) => {

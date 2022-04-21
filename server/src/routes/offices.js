@@ -5,7 +5,7 @@ import knexfile from '../../knexfile.js'
 import { verifyToken } from '../../utils/verifyToken.js'
 import { getUserOfficeId, getOfficeScheduleId, isUserAdmin } from '../../utils/getResources.js'
 const router = express.Router();
-const knex = knexImport(knexfile['development'])
+const knex = knexImport(knexfile[process.env.NODE_ENV || 'development'])
 
 router.post('/new-office', async (req, res) => {
   if (req.cookies['shifty']) {
