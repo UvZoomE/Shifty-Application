@@ -1,7 +1,7 @@
 import './App.css';
-import React, {useState, useEffect, useContext, createContext} from 'react';
-import {BrowserRouter as Router, Routes, Route, useNavigate} from 'react-router-dom';
-import { tracksToShifts, getStatus, shiftsToTracks, getStartStop } from './components/utils'
+import React, {useState, useEffect, createContext} from 'react';
+import {Routes, Route, useNavigate} from 'react-router-dom';
+import { shiftsToTracks } from './components/utils'
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Header from './components/Header';
@@ -31,7 +31,7 @@ export const AuthContext = createContext(null);
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
-  const [serverURL, setServerURL] = useState('http://localhost:3001')
+  const [serverURL] = useState('http://localhost:3001')
   const [user, setUser] = useState()
   const [teams, setTeams] = useState([])
   const [tracks, setTracks] = useState()
@@ -103,7 +103,7 @@ function App() {
 
     setValues()
 
-  }, [])
+  }, [navigate, serverURL])
 
 
 

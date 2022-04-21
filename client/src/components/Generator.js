@@ -1,5 +1,3 @@
-import React from 'react'
-import { RuxTimeline, RuxTrack, RuxRuler, RuxTimeRegion } from '@astrouxds/react'
 
 class Schedule  {
 

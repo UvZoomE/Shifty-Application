@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Teams.css'
 
 import { AuthContext } from "../App.js";
@@ -56,7 +55,7 @@ const Teams = () => {
   useEffect(() => {
     setTargetTeams(auth.teams)
     auth.setTeams(auth.teams)
-  }, [auth.teams])
+  }, [auth])
 
   const editHandler = () =>{
     if (edit) {

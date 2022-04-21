@@ -2,9 +2,9 @@ import '@astrouxds/astro-web-components/dist/astro-web-components/astro-web-comp
 import { RuxTimeline, RuxTrack, RuxRuler, RuxTimeRegion } from '@astrouxds/react'
 import React, { useState, useEffect, useContext } from 'react';
 import '../styles/Calendar.css'
-import Schedule, { Panama, SevenTwo } from './Generator'
+import { Panama, SevenTwo } from './Generator'
 import { AuthContext } from "../App.js";
-import { tracksToShifts, getStatus, shiftsToTracks, getStartStop } from './utils'
+import { tracksToShifts, getStartStop } from './utils'
 
 const schedules = {
   1: {
@@ -22,7 +22,7 @@ const schedules = {
 const Calendar = () => {
 
   const auth = useContext(AuthContext);
-  const [shifts, setShifts] = useState(auth.shifts)
+  // const [shifts, setShifts] = useState(auth.shifts)
   const [tracks, setTracks] = useState(auth.tracks)
   const [start, setStart] = useState(auth.tracks ? getStartStop(auth.tracks)[0].toISOString() : undefined)
   const [stop, setStop] = useState(auth.tracks ? getStartStop(auth.tracks)[1].toISOString() : undefined)
@@ -34,7 +34,7 @@ const Calendar = () => {
       setTracks(auth.tracks)
       setStart(getStartStop(auth.tracks)[0].toISOString())
       setStop(getStartStop(auth.tracks)[1].toISOString())
-      setShifts(auth.shifts)
+      // setShifts(auth.shifts)
     }
 
 
