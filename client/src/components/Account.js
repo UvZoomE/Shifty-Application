@@ -121,7 +121,7 @@ const Account = () => {
                 <div>&nbsp;</div>
               </div>
               <form  className='values' onSubmit={event => handleSubmitOffice(event, setCreateOffice, auth.user, auth.setUser, auth) }>
-                <input className='input info' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name}/>
+                <input className='input' type='text' name='office_name' id='office_name' defaultValue={auth.user.office_name}/>
                 <input className='button save' type="submit" value="Save" />
               </form>
             </div>

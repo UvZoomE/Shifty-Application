@@ -77,7 +77,7 @@ function App() {
         .then(user => {
           setUser(user)
         })
-        .catch(() => navigate('/'))
+        .catch()
 
       await fetch(`${serverURL}/api/teams/all`, request)
         .then(data => data.json())

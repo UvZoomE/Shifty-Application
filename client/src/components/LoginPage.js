@@ -12,7 +12,7 @@ const  handleSubmit = (event, navigate, auth) =>{
   auth.authFunctions.signInWithEmailAndPassword(auth.authInstance, email, password)
     .then(userCred => auth.authFunctions.getIdToken(userCred.user))
     .then(token => auth.cookie.setCookie(['shifty'], token))
-    .then(() => navigate("/"))
+    .then(() => navigate("/calendar"))
     .catch(err => console.log(err))
 }
 

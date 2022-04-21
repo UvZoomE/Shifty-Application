@@ -6,6 +6,15 @@
   transition: 0.2s;
 }
 
+.login-link {
+  /* position: absolute;
+  top: 10px;
+  left: 50px; */
+  font-size: 37px;
+  transition: 0.2s;
+  margin-top: 10vh;
+}
+
 .hamburger-button:hover {
   transform: scale(1.2)
 }

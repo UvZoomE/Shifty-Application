@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import Sidebar from './Sidebar'
 import '../styles/MainPage.css'
 
@@ -26,6 +26,7 @@ const MainPage = () => {
 
   const navigate = useNavigate()
   const auth = useContext(AuthContext);
+  const [showLoginLink, setShowLoginLink] = useState(false)
 
   // if auth.user is undefined, navigate to /login
   useEffect(() => {
@@ -50,12 +51,13 @@ const MainPage = () => {
               auth.setTeams(sortedTeams)
             })
         })
-        .catch(() => navigate('/login'))
+        .catch(() => setShowLoginLink(true))
+    } else {
+      if (window.location.pathname === "/") {
+        navigate('/calendar')
+      }
     }
 
-    if (window.location.pathname === "/") {
-      navigate('/calendar')
-    }
   }, [])
 
 
@@ -72,8 +74,20 @@ const MainPage = () => {
       <div className='hamburger-button' onClick={handleClick}>
         &#9776;
       </div>
+      {showLoginLink ?
+      <div className='login-link'>
+        You are not logged in: &nbsp;
+        <Link className='login-link' to='/login'>
+          Login
+        </Link>
+      </div> : ''}
+
       <Sidebar setShowSidebar={setShowSidebar}/>
-      <Outlet />
+      {
+        auth.user ?
+        <Outlet /> : ''
+      }
+
     </div>
  )
 }
