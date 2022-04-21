@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import '../styles/Account.css'
 
 import { AuthContext } from "../App.js";
@@ -69,7 +69,7 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
     fetch(`${auth.serverURL}/api/users/current-user`, request)
       .then(data => data.json())
       .then(user => {
-        setUser(user[0])
+        setUser(user)
       })
   })
   setUser({
@@ -88,6 +88,11 @@ const Account = () => {
   const [edit, setEdit] = useState(false)
   const [createOffice, setCreateOffice] = useState(false)
   const [wait, setWait] = useState(false)
+  const [user, setUser] = useState(auth.user)
+
+  useEffect(() => {
+    setUser(auth.user)
+  }, [auth.user])
 
   const clickHandler = () =>{
     setEdit(!edit)
@@ -96,7 +101,7 @@ const Account = () => {
   return ( auth.user ?
     <div className='accountWrapper' id='subpage'>
 
-        {auth.user.office_name || createOffice || wait ? '' :
+        { auth.user && (auth.user.office_name || createOffice || wait) ? '' :
           <div  className='office-create'>
             <h2>No Office Detected</h2>
             <p>Create an office now, OR wait for an admin to add you to an office</p>
@@ -142,7 +147,7 @@ const Account = () => {
               <div>Admin</div>
               <div>&nbsp;</div>
             </div>
-            {edit ?
+            {edit && auth.user ?
               <form  className='values' onSubmit={event => handleSubmit(event, setEdit, auth) }>
                 <input className='input schedInput' type='text' name='first_name' id='first_name' defaultValue={auth.user.first_name}/>
                 <input className='input schedInput' type='text' name='last_name' id='last_name' defaultValue={auth.user.last_name}/>
@@ -154,7 +159,7 @@ const Account = () => {
                 <div>{auth.user.office_name || <>&nbsp;</>}</div>
                 <div>{auth.user.is_admin.toString() || <>&nbsp;</>}</div>
                 <input className='button save' type="submit" value="Save" />
-              </form> :
+              </form> : auth.user ?
               <div className='values'>
                 <div>{auth.user.first_name || <>&nbsp;</>}</div>
                 <div>{auth.user.last_name || <>&nbsp;</>}</div>
@@ -165,12 +170,12 @@ const Account = () => {
                 <div>{auth.user.office_name || <>&nbsp;</>}</div>
                 <div>{auth.user.is_admin.toString() || "False"}</div>
                 <div>&nbsp;</div>
-              </div>
+              </div> : ''
             }
           </div>
 
         </div>
-    </div> : <></>
+    </div> : ''
  )
 }
 

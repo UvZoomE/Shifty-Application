@@ -51,7 +51,10 @@ const MainPage = () => {
               auth.setTeams(sortedTeams)
             })
         })
-        .catch(() => setShowLoginLink(true))
+        .catch(() => {
+          navigate('/login')
+          setShowLoginLink(true)
+        })
     } else {
       if (window.location.pathname === "/") {
         navigate('/calendar')
@@ -83,10 +86,7 @@ const MainPage = () => {
       </div> : ''}
 
       <Sidebar setShowSidebar={setShowSidebar}/>
-      {
-        auth.user ?
-        <Outlet /> : ''
-      }
+      <Outlet />
 
     </div>
  )

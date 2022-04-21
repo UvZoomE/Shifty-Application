@@ -32,6 +32,7 @@ export const AuthContext = createContext(null);
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
   const [serverURL] = useState('https://peaceful-wildwood-88195.herokuapp.com')
+  // const [serverURL] = useState('http://localhost:3001')
   const [user, setUser] = useState()
   const [teams, setTeams] = useState([])
   const [tracks, setTracks] = useState()
@@ -77,7 +78,7 @@ function App() {
         .then(user => {
           setUser(user)
         })
-        .catch()
+        .catch(() => navigate('/login'))
 
       await fetch(`${serverURL}/api/teams/all`, request)
         .then(data => data.json())
