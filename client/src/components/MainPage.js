@@ -40,6 +40,14 @@ const MainPage = () => {
       .then(data => data.json())
       .then(user => {
         auth.setUser(user)
+        fetch(`${auth.serverURL}/api/teams/all`, request)
+          .then(data => data.json())
+          .then(teams => {
+            let positions = teams.map(team => team.position).sort()
+            let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
+            let sortedTeams = teamIndices.map(ix => teams[ix])
+            auth.setTeams(sortedTeams)
+          })
       })
       .catch(() => navigate('/login'))
   }

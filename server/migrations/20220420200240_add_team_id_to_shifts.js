@@ -7,12 +7,6 @@
     table.integer('team_position')
     table.integer('office_id')
     table.foreign(['team_position', 'office_id']).references(['position', 'office_id']).on('teams')
-
-    // table.integer('team_position')
-    // table.foreign('team_position').references('teams.position')
-
-    // table.integer('office_id')
-    // table.foreign('office_id').references('teams.office_id')
   })
 
 };

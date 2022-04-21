@@ -35,7 +35,7 @@ rux-timeline::part(time-region-container) {
 } */
 
 .timeline {
-  margin: 20px;
+  margin: 10px;
   transition: 0.5s;
 }
 /*
@@ -44,13 +44,13 @@ rux-timeline::part(time-region-container) {
 } */
 
 .generate {
-  width: 100%;
+  width: 90%;
   margin-left: 0px;
 }
 
 .confirm {
   width: 15vw;
-  min-width: 200px;
+  min-width: 130px;
 }
 
 .confirm-buttons {
@@ -58,4 +58,22 @@ rux-timeline::part(time-region-container) {
   flex-direction: row;
   justify-content: center;
   margin-top: 5vh;
+}
+
+.deleteShifts {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.delete {
+  width: 15vw;
+  min-width: 150px;
+  margin: 30px;
+}
+
+.schedInput {
+  margin: 0;
 }

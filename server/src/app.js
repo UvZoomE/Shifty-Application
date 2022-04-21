@@ -9,6 +9,7 @@ const users = require('./routes/users.js');
 const offices = require('./routes/offices.js');
 const schedules = require('./routes/schedules.js');
 const teams = require('./routes/teams.js');
+const shifts = require('./routes/shifts.js');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -26,6 +27,7 @@ app.use('/api/users', users);
 app.use('/api/offices', offices);
 app.use('/api/schedules', schedules);
 app.use('/api/teams', teams);
+app.use('/api/shifts', shifts);
 
 
 app.listen(PORT, () => {

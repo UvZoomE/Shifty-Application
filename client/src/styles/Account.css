@@ -59,6 +59,8 @@
   align-items: start;
   height: 100%;
   font-size: max(3vh, 30px);
+  width: 40%;
+  padding-left: 5%;
 }
 
 .values{
@@ -68,7 +70,8 @@
   align-items: start;
   height: 100%;
   font-size: max(3vh, 30px);
-  width: 40%;
+  width: 60%;
+  color: #649cbd;
 }
 
 .save{

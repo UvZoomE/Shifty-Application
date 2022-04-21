@@ -25,22 +25,6 @@ const handleSubmit = async (event, setEdit, auth, targetTeams) =>{
     })
   }
 
-
-  // auth.teams.forEach(async team =>{
-  //   console.log("DELETING Team", team.position)
-  //   let request = {
-  //     method: 'DELETE',
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   }
-
-  //   await fetch(`${auth.serverURL}/api/teams/${team.position}`, request)
-  // })
-
-
-
   newTeams.forEach(async team => {
 
     let request = {

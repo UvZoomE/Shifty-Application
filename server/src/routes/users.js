@@ -18,6 +18,7 @@ router.get('/current-user', async (req, res) => {
 
     const userData = await knex.select('*').from('users').where('id', userId)
       .catch(() => res.sendStatus(500))
+
     if (userData[0].office_id) {
       knex.select('name').from('offices').where('id', userData[0].office_id)
       .then(officeData => {
