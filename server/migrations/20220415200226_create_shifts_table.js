@@ -7,10 +7,11 @@ exports.up = function(knex) {
     table.increments('id')
     table.text('notes')
     table.dateTime('start_time')
+    table.dateTime('stop_time')
     table.integer('schedule_id')
     table.foreign('schedule_id').references('schedules.id')
   })
-  
+
 };
 
 /**
@@ -23,5 +24,5 @@ exports.down = function(knex) {
   }).then(() => {
     return knex.schema.dropTableIfExists('shifts')
   })
-  
+
 };

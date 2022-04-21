@@ -1,6 +1,7 @@
 import './App.css';
 import React, {useState, useEffect, useContext, createContext} from 'react';
 import {BrowserRouter as Router, Routes, Route, useNavigate} from 'react-router-dom';
+import { tracksToShifts, getStatus, shiftsToTracks, getStartStop } from './components/utils'
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Header from './components/Header';
@@ -32,6 +33,9 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
   const [serverURL, setServerURL] = useState('http://localhost:3001')
   const [user, setUser] = useState()
+  const [teams, setTeams] = useState([])
+  const [tracks, setTracks] = useState()
+  const [shifts, setShifts] = useState()
 
   const navigate = useNavigate()
 
@@ -49,7 +53,13 @@ function App() {
     },
     serverURL: serverURL,
     user: user,
-    setUser: setUser
+    setUser: setUser,
+    teams: teams,
+    setTeams: setTeams,
+    tracks: tracks,
+    setTracks: setTracks,
+    shifts: shifts,
+    setShifts: setShifts
   }
 
   useEffect(() => {
@@ -61,14 +71,38 @@ function App() {
         'Content-Type': 'application/json'
       },
     }
+    const setValues = async () => {
+      await fetch(`${serverURL}/api/users/current-user`, request)
+        .then(data => data.json())
+        .then(user => {
+          setUser(user)
+        })
+        .catch(() => navigate('/'))
 
-    fetch(`${serverURL}/api/users/current-user`, request)
-      .then(data => data.json())
-      .then(user => {
-        console.log(user[0])
-        setUser(user[0])
-      })
-      .catch(() => navigate('/'))
+      await fetch(`${serverURL}/api/teams/all`, request)
+        .then(data => data.json())
+        .then(async teams => {
+          let positions = teams.map(team => team.position).sort()
+          let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
+          let sortedTeams = teamIndices.map(ix => teams[ix])
+          setTeams(sortedTeams)
+
+          await fetch(`${serverURL}/api/shifts/history`, request)
+          .then(data => data.json())
+          .then(shifts => {
+            setShifts(shifts)
+            setTracks(shiftsToTracks(shifts, sortedTeams.filter(team => team.name)))
+          })
+          .catch(err => console.log(err))
+
+        })
+        .catch(err => console.log(err))
+
+
+    }
+
+    setValues()
+
   }, [])
 
 

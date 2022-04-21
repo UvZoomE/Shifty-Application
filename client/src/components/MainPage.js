@@ -28,9 +28,32 @@ const MainPage = () => {
   const auth = useContext(AuthContext);
 
   // if auth.user is undefined, navigate to /login
-  console.log(auth.user)
   if (auth.user === undefined) {
-    navigate('/login')
+    let request = {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+    fetch(`${auth.serverURL}/api/users/current-user`, request)
+      .then(data => data.json())
+      .then(user => {
+        auth.setUser(user)
+        fetch(`${auth.serverURL}/api/teams/all`, request)
+          .then(data => data.json())
+          .then(teams => {
+            let positions = teams.map(team => team.position).sort()
+            let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
+            let sortedTeams = teamIndices.map(ix => teams[ix])
+            auth.setTeams(sortedTeams)
+          })
+      })
+      .catch(() => navigate('/login'))
+  }
+
+  if (window.location.pathname === "/") {
+    navigate('/calendar')
   }
 
   const [showSidebar, setShowSidebar] = useState(false)

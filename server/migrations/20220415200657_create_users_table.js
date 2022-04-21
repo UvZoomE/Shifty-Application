@@ -4,18 +4,17 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable("users", (table) => {
-    table.text('id')
-    table.text('email')
-    table.text('first_name')
-    table.text('last_name')
-    table.text('rank')
-    table.text('duty_title')
-    table.text('work_phone')
-    table.boolean('is_admin')
-    table.integer('team_id').nullable()
-    table.integer('office_id').nullable()
-    table.foreign('team_id').references('teams.id')
-    table.foreign('office_id').references('offices.id')
+    table.text('id').primary()
+    table.text('email').unique()
+    table.text('first_name').nullable()
+    table.text('last_name').nullable()
+    table.text('rank').nullable()
+    table.text('duty_title').nullable()
+    table.text('work_phone').nullable()
+    table.boolean('is_admin').nullable()
+    table.integer('team_position')
+    table.integer('office_id')
+    table.foreign(['team_position', 'office_id']).references(['position', 'office_id']).on('teams')
   })
 
 };
@@ -26,8 +25,7 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
   return knex.schema.alterTable('users', (table) => {
-    table.dropForeign('team_id')
-    table.dropForeign('office_id')
+    table.dropForeign(['team_position', 'office_id'])
   }).then(() => {
     return knex.schema.dropTableIfExists('users')
   })

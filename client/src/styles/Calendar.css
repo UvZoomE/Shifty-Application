@@ -35,10 +35,46 @@ rux-timeline::part(time-region-container) {
 } */
 
 .timeline {
-  margin: 20px;
+  margin: 10px;
   transition: 0.5s;
 }
 /*
 .track {
   transition: 0.5s;
 } */
+
+.generate {
+  width: 90%;
+  margin-left: 0px;
+}
+
+.confirm {
+  width: 15vw;
+  min-width: 130px;
+}
+
+.confirm-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 5vh;
+}
+
+.deleteShifts {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.delete {
+  width: 15vw;
+  min-width: 150px;
+  margin: 30px;
+  font-size: max(2vh, 15px);
+}
+
+.schedInput {
+  margin: 0;
+}

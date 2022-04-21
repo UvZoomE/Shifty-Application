@@ -5,8 +5,8 @@ First Time for Office Admin
 - [x] Go to create account page
 - [x] Create Account
 - [x] Go to home page
-- [ ] Page would ask if you would like to create an office or join an office (BACKEND)
-- [ ] Admin would select create an office (We can create that page)
+- [x] Page would ask if you would like to create an office or join an office (BACKEND)
+- [x] Admin would select create an office (We can create that page)
 - [ ] Page would ask to create teams
 - [ ] Admin would create teams (We can create the page)
 - [ ] Navigate back to Home Page
