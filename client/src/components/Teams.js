@@ -32,7 +32,8 @@ const handleSubmit = async (event, setEdit, auth, targetTeams) =>{
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(team)
+      body: JSON.stringify(team),
+      mode: 'cors'
     }
 
     await fetch(`${auth.serverURL}/api/teams/new-team`, request)

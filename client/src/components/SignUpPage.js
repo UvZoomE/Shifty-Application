@@ -31,7 +31,8 @@ const  handleSubmit = (event, navigate, auth) =>{
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(user)
+          body: JSON.stringify(user),
+          mode: 'cors'
         }
 
         fetch(`${auth.serverURL}/api/users/new-user`, request)

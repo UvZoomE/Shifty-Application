@@ -65,6 +65,7 @@ const  handleSubmitOffice = (event, setCreateOffice, user, setUser, auth) =>{
       headers: {
         'Content-Type': 'application/json'
       },
+      mode: 'cors'
     }
     fetch(`${auth.serverURL}/api/users/current-user`, request)
       .then(data => data.json())

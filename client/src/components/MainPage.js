@@ -37,6 +37,7 @@ const MainPage = () => {
         headers: {
           'Content-Type': 'application/json'
         },
+        mode: 'cors'
       }
       fetch(`${auth.serverURL}/api/users/current-user`, request)
         .then(data => data.json())

@@ -71,6 +71,7 @@ function App() {
       headers: {
         'Content-Type': 'application/json'
       },
+      mode: 'cors'
     }
     const setValues = async () => {
       await fetch(`${serverURL}/api/users/current-user`, request)

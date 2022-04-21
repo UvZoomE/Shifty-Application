@@ -103,7 +103,8 @@ const Calendar = () => {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        mode: 'cors'
       }
       fetch(`${auth.serverURL}/api/shifts/history`, request)
       setTracks()
