@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from './Sidebar'
 import '../styles/MainPage.css'
@@ -28,33 +28,36 @@ const MainPage = () => {
   const auth = useContext(AuthContext);
 
   // if auth.user is undefined, navigate to /login
-  if (auth.user === undefined) {
-    let request = {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+  useEffect(() => {
+    if (auth.user === undefined) {
+      let request = {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      }
+      fetch(`${auth.serverURL}/api/users/current-user`, request)
+        .then(data => data.json())
+        .then(user => {
+          auth.setUser(user)
+          fetch(`${auth.serverURL}/api/teams/all`, request)
+            .then(data => data.json())
+            .then(teams => {
+              let positions = teams.map(team => team.position).sort()
+              let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
+              let sortedTeams = teamIndices.map(ix => teams[ix])
+              auth.setTeams(sortedTeams)
+            })
+        })
+        .catch(() => navigate('/login'))
     }
-    fetch(`${auth.serverURL}/api/users/current-user`, request)
-      .then(data => data.json())
-      .then(user => {
-        auth.setUser(user)
-        fetch(`${auth.serverURL}/api/teams/all`, request)
-          .then(data => data.json())
-          .then(teams => {
-            let positions = teams.map(team => team.position).sort()
-            let teamIndices = positions.map(position => teams.findIndex(team => team.position === position))
-            let sortedTeams = teamIndices.map(ix => teams[ix])
-            auth.setTeams(sortedTeams)
-          })
-      })
-      .catch(() => navigate('/login'))
-  }
 
-  if (window.location.pathname === "/") {
-    navigate('/calendar')
-  }
+    if (window.location.pathname === "/") {
+      navigate('/calendar')
+    }
+  }, [])
+
 
   const [showSidebar, setShowSidebar] = useState(false)
 

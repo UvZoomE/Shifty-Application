@@ -103,7 +103,7 @@ function App() {
 
     setValues()
 
-  }, [navigate, serverURL])
+  }, [])
 
 
 
