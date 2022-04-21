@@ -1,9 +1,12 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-const { verifyToken } = require('../../utils/verifyToken');
-const { getUserOfficeId, isUserAdmin } = require('../../utils/getResources.js');
+import express from 'express';
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
+import { verifyToken } from '../../utils/verifyToken.js'
+import { getUserOfficeId, isUserAdmin } from '../../utils/getResources.js'
 
 const router = express.Router();
+const knex = knexImport(knexfile['development'])
 
 // get the information of the requesting user
 router.get('/current-user', async (req, res) => {
@@ -183,4 +186,4 @@ router.patch('/edit-team', async (req, res) => {
   }
 })
 
-module.exports = router;
+export default router;

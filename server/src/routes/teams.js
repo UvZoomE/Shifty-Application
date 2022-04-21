@@ -1,8 +1,12 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-const { verifyToken } = require('../../utils/verifyToken');
+import express from 'express';
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
+import {verifyToken} from '../../utils/verifyToken.js'
+import {isUserAdmin, getUserOfficeId} from '../../utils/getResources.js'
+
 const router = express.Router()
-const { isUserAdmin, getUserOfficeId } = require('../../utils/getResources');
+const knex = knexImport(knexfile['development'])
 
 
 router.get('/all', async (req, res) => {
@@ -161,4 +165,4 @@ router.patch('/new-team-name', async (req, res) => {
 
 
 
-module.exports = router;
+export default router;

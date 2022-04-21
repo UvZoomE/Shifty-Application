@@ -1,8 +1,11 @@
-const express = require('express');
-const knex = require('knex')(require('../../knexfile.js')['development']);
-const { verifyToken } = require('../../utils/verifyToken');
-const { getUserOfficeId, getOfficeScheduleId, isUserAdmin } = require('../../utils/getResources.js');
+import express from 'express'
+// const knex = require('knex')(require('../../knexfile.js')['development']);
+import knexImport from 'knex'
+import knexfile from '../../knexfile.js'
+import { verifyToken } from '../../utils/verifyToken.js'
+import { getUserOfficeId, getOfficeScheduleId, isUserAdmin } from '../../utils/getResources.js'
 const router = express.Router();
+const knex = knexImport(knexfile['development'])
 
 router.post('/new-office', async (req, res) => {
   if (req.cookies['shifty']) {
@@ -76,5 +79,5 @@ router.patch('/set-schedule', async (req, res) => {
 // TODO: POST request for org chart img
 // TODO: GET request for org chart img
 
-module.exports = router;
+export default router;
 

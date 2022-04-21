@@ -1,10 +1,12 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon ./src/app.js",
+    "start": "nodemon --experimental-vm-modules ./src/app.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "database": "docker run --rm -it --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v database:/var/lib/postgresql/data postgres"
   },
   "author": "",
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.2",
+    "jest": "^27.5.1",
     "supertest": "^6.2.2"
   }
 }
