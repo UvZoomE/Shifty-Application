@@ -33,8 +33,9 @@ Shifty is an scheduling app that can automatically generate different types of 2
 - After logging in (or creating an account if you haven't done so already) you can create an office.
 - In this office you can create teams that will be automatically assigned shifts upon schdule generation.
 - After creating teams you can navigate to the Schedule page and select your preferred schedule type along with the desired start and end dates.
-- At this point
+- At this point, you have the option to save your new schedule or cancel it and make a new one that is more to your liking.
 
+- The purpose of this app it to automatically generate schedules
 
 
 - include pictures and videos
@@ -58,13 +59,31 @@ Shifty is an scheduling app that can automatically generate different types of 2
 - The express backend utilizes Firebase's [Admin SDK](https://firebase.google.com/docs/reference/admin) to verify the legitimacy of a requesting user's JWT.
 
 ## Installation
+[Firebase Setup]
+  - Make an account with Firebase @ https://firebase.google.com/
+  - Create a project (of any name)
+
 [Frontend]
   - Navigate to client folder
   - Run `npm install`
+  - Navigate to your project on the Firebase website
+  - Go to cog at top left (next to "Project Overview")
+  - Select Project Settings
+  - Under the 'General' tab, click the symbol denoted as `</>` (assign any app nickname in step 1), select register app
+  - Add the config information provided in step 2 into a file named 'firebaseConfig.json' in the client folder
+  - To start run: `npm start`
+
 [Backend]
   - Navigate to server folder
   - Run `npm install`
-
+  - Run `npm run database` to setup docker container
+  - Navigate to your project on the Firebase website
+  - Go to cog at top left (next to "Project Overview")
+  - Select Project Settings
+  - Under the 'Service Accounts' tab, click the 'Firebase Admin SDK' button and create a new service account
+  - Generate a new private key and save it to the server/utils folder
+  - Rename the private key file to adminKey.json
+  - To start run: `npm start`
 
 
 
