@@ -20,14 +20,9 @@ Shifty is an scheduling app that can automatically generate different types of 2
 [License](#License)
 
 # Description
-- How the app works, what can you do with the app
 
 - Feature list
   Currently, there are two types of schedules that are desiged to autogenerate for four teams.
-
-- include pictures and made videos
-
-- A more detailed outline of the project. What does it do? Is there a high level list of features? If describing a project that has visual features, consider adding pictures or animations of the features and functionality in this section. See Adding Screen Captures below.
 
 # Usage
 - After logging in (or creating an account if you haven't done so already) you can create an office.
@@ -36,11 +31,6 @@ Shifty is an scheduling app that can automatically generate different types of 2
 - At this point, you have the option to save your new schedule or cancel it and make a new one that is more to your liking.
 
 - The purpose of this app it to automatically generate schedules
-
-
-- include pictures and videos
-
-- Further details on how the project is meant to be used may be helpful. For a library or framework, this section would outline how to use the library within another project (see socket.io  ). For a service that is meant to be used within a larger project architecture, instructions on how to integrate may be necessary (see node-statsD  ).
 
 
 # For Developers
