@@ -1,0 +1,44 @@
+services:
+  shifty-app:
+    build: ./client
+    container_name: shifty-app
+    ports:
+      - 3000:3000
+    depends_on:
+      - shifty-server
+    environment:
+      - REACT_APP_SERVER_URL=https://shifty.e-acres.com
+
+  shifty-server:
+    build: ./server
+    container_name: shifty-server
+    ports:
+      - 3001:3001
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=shifty
+      - DB_CONTAINER=shifty-db
+      - DB_PORT=5432
+    depends_on:
+      - shifty-db
+
+  shifty-db:
+    image: postgres:alpine
+    container_name: shifty-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=shifty
+      - POSTGRES_HOST=shifty-db
+      - POSTGRES_PORT=5432
+    user: 1000:1000
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: external-network

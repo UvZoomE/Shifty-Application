@@ -5,8 +5,8 @@ export const verifyToken = (token) => {
   .then(decodedToken => {
     return decodedToken.uid;
   })
-  .catch(() => {
-    return undefined;
+  .catch((err) => {
+    console.log(err)
   })
 }
 

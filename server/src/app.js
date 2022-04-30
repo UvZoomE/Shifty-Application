@@ -11,6 +11,21 @@ import offices from './routes/offices.js';
 import schedules from './routes/schedules.js';
 import teams from './routes/teams.js';
 import shifts from './routes/shifts.js';
+import knex from 'knex'
+import knexfile from '../knexfile.js'
+
+const myknex = knex(knexfile[process.env.NODE_ENV || 'development'])
+
+(async () => {
+  try {
+    await myknex.migrate.rollback()
+    await myknex.migrate.latest()
+    await myknex.seed.run()
+  } catch (err) {
+    console.log(err)
+  }
+})();
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

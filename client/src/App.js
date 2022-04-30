@@ -31,8 +31,7 @@ export const AuthContext = createContext(null);
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(['shifty']);
-  // const [serverURL] = useState('https://peaceful-wildwood-88195.herokuapp.com')
-  const [serverURL] = useState('http://localhost:3001')
+  const [serverURL] = useState(process.env.REACT_APP_SERVER_URL || 'http://localhost:3001')
   const [user, setUser] = useState()
   const [teams, setTeams] = useState([])
   const [tracks, setTracks] = useState()
